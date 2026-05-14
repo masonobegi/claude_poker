@@ -3,9 +3,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   width: 84px;
-  padding: 10px 6px 8px;
+  padding: 0 0 6px 0;
+  overflow: hidden;
   background: linear-gradient(160deg, rgba(30,10,60,0.97), rgba(15,5,35,0.99));
   border: 1.5px solid var(--type-color, #888);
   border-radius: 12px;
@@ -45,9 +46,33 @@
   50%       { box-shadow: 0 0 22px rgba(255,60,60,0.9); }
 }
 
-.power-tile-icon {
-  font-size: 1.9rem;
-  line-height: 1;
+/* AI art fills the top portion of the tile */
+.power-tile-art-wrap {
+  width: 100%;
+  height: 56px;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.power-tile-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.power-tile-art.loaded { opacity: 1; }
+
+.power-tile-locked-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .power-tile-name {

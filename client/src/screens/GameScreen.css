@@ -8,6 +8,22 @@
   position: relative;
 }
 
+/* AI background art fades in when loaded */
+.game-screen::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: var(--game-bg-url);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.18;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+
+.game-table-area, .game-hud { position: relative; z-index: 1; }
+
 .game-loading {
   display: flex;
   flex-direction: column;

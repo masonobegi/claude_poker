@@ -117,11 +117,61 @@
   z-index: 3;
 }
 
-/* Face card SVG fills the card */
+/* Face card SVG fallback */
 .face-svg {
   width: 85%;
   height: 85%;
   display: block;
+}
+
+/* AI face art */
+.face-art-wrap, .card-back-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.face-art-img, .card-back-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.face-art-img.loaded, .card-back-img.loaded {
+  opacity: 1;
+}
+
+.face-art-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4em;
+  font-weight: 900;
+  color: var(--suit-color, #333);
+  font-family: Georgia, serif;
+  background: linear-gradient(145deg, #f8f4f0, #ede8e0);
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.card-back-placeholder {
+  position: absolute;
+  inset: 0;
+  background: #150535;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
 }
 
 /* ── Badges ──────────────────────────────────────────────────── */

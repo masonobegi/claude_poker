@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { GAME_BG_ART } from '../assets/artUrls';
 
 const SKIPPABLE_PHASES = new Set([
   'before_deal','before_preflop','after_flop_before_action',
@@ -47,6 +48,15 @@ export default function GameScreen({
 }) {
   const [selectedCard, setSelectedCard] = useState(null);
   const [logOpen, setLogOpen] = useState(false);
+
+  useEffect(() => {
+    // Preload background art
+    const img = new Image();
+    img.src = GAME_BG_ART;
+    img.onload = () => {
+      document.documentElement.style.setProperty('--game-bg-url', `url(${GAME_BG_ART})`);
+    };
+  }, []);
 
   if (!gameState) {
     return (

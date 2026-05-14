@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './PowerCardTile.css';
+import { POWER_ART } from '../../assets/artUrls';
 
 const TYPE_COLOR = {
   SPELL:       '#9966ff',
@@ -21,6 +22,27 @@ const TIMING_LABEL = {
   AFTER_HAND:            'After the hand ends (if you won)',
 };
 
+function PowerCardArt({ definitionId }) {
+  const [imgFailed, setImgFailed] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const url = POWER_ART[definitionId];
+
+  if (!url || imgFailed) return null;
+
+  return (
+    <div className="power-tile-art-wrap">
+      <img
+        src={url}
+        className={`power-tile-art ${imgLoaded ? 'loaded' : ''}`}
+        onLoad={() => setImgLoaded(true)}
+        onError={() => setImgFailed(true)}
+        alt=""
+        draggable={false}
+      />
+    </div>
+  );
+}
+
 export default function PowerCardTile({ card, playable, mustSell, onClick }) {
   const [hovered, setHovered] = useState(false);
   const color = TYPE_COLOR[card.type] || '#888';
@@ -36,10 +58,10 @@ export default function PowerCardTile({ card, playable, mustSell, onClick }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div className="power-tile-icon">{card.icon}</div>
+      <PowerCardArt definitionId={card.definitionId} />
       <div className="power-tile-name">{card.name}</div>
       {mustSell && <div className="power-tile-sell-badge">SELL!</div>}
-      {!playable && !mustSell && <div className="power-tile-locked">🔒</div>}
+      {!playable && !mustSell && <div className="power-tile-locked-overlay" />}
 
       {hovered && (
         <div className="power-tile-tooltip">
