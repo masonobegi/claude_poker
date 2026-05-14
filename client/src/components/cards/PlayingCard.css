@@ -1,133 +1,100 @@
 .playing-card {
   position: relative;
-  border-radius: 9px;
-  border: 1px solid rgba(220,210,255,0.7);
+  border-radius: 7px;
+  background: #fff;
+  border: 1px solid #ccc;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 4px 5px;
   user-select: none;
-  transition: transform 0.15s, box-shadow 0.15s;
   overflow: hidden;
-  animation: cardDeal 0.35s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.35),
+              inset 0 1px 0 rgba(255,255,255,0.9);
+  transition: transform 0.15s, box-shadow 0.15s;
+  animation: cardDeal 0.3s cubic-bezier(0.2,0.8,0.3,1) both;
 }
 
-/* Sheen gradient overlay */
-.playing-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.18) 0%,
-    rgba(255,255,255,0.06) 40%,
-    transparent 60%
-  );
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 5;
-}
+/* Playing card proportions: 2.5" × 3.5" ratio */
+.playing-card.small    { width: 52px;  height: 73px;  }
+.playing-card.normal   { width: 64px;  height: 90px;  }
+.playing-card.community{ width: 80px;  height: 112px; }
+.playing-card.large    { width: 92px;  height: 129px; }
 
 @keyframes cardDeal {
-  from { opacity: 0; transform: scale(0.75) rotateY(40deg); }
-  to   { opacity: 1; transform: scale(1) rotateY(0); }
+  from { opacity: 0; transform: scale(0.78) translateY(-8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* Sizes */
-.playing-card.normal    { width: 64px;  height: 92px;  font-size: 0.75rem; }
-.playing-card.community { width: 76px;  height: 110px; font-size: 0.85rem; }
-.playing-card.large     { width: 88px;  height: 128px; font-size: 0.95rem; }
-.playing-card.small     { width: 52px;  height: 76px;  font-size: 0.65rem; }
-
-/* Red suits */
-.playing-card.red {
-  background: linear-gradient(145deg, #fffaf5, #f5ede0);
-  box-shadow: 0 3px 10px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.9);
-}
-
-/* Black suits */
-.playing-card.black {
-  background: linear-gradient(145deg, #f8f5ff, #ece8fa);
-  box-shadow: 0 3px 10px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.9);
-}
+/* Suits */
+.playing-card.red  { --suit-color: #b91c1c; }
+.playing-card.black{ --suit-color: #1e1b4b; }
 
 /* Card back */
 .playing-card.back {
-  background: linear-gradient(135deg, #1e0650, #0e022e);
-  border-color: rgba(180,120,255,0.5);
-  box-shadow: 0 3px 10px rgba(0,0,0,0.5), 0 0 8px rgba(120,60,200,0.2);
+  background: #1e0a40;
+  border-color: #4c1d95;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.6), 0 0 8px rgba(109,40,217,0.2);
 }
+.playing-card.back svg { width: 100%; height: 100%; }
 
-.card-back-pattern {
-  position: absolute;
-  inset: 4px;
-  border-radius: 6px;
-  border: 1px solid rgba(180,120,255,0.2);
-  background:
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 5px,
-      rgba(120,60,200,0.08) 5px,
-      rgba(120,60,200,0.08) 10px
-    ),
-    radial-gradient(ellipse at 50% 50%, rgba(140,60,220,0.15) 0%, transparent 70%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  color: rgba(180,120,255,0.3);
-}
-
-/* Wild card */
+/* Wild */
 .playing-card.wild {
-  background: linear-gradient(145deg, #fffbe6, #fff0b0);
-  border-color: rgba(255,200,60,0.9);
-  box-shadow: 0 0 16px rgba(255,200,60,0.5), 0 3px 10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.9);
-  animation: cardDeal 0.35s cubic-bezier(0.2,0.8,0.3,1) both, wildShimmer 2s ease-in-out infinite;
+  background: linear-gradient(145deg, #fffce0, #fff3b0);
+  border-color: #d97706;
+  box-shadow: 0 0 14px rgba(217,119,6,0.5), 0 3px 10px rgba(0,0,0,0.4);
+  animation: cardDeal 0.3s both, wildPulse 2s ease-in-out infinite;
 }
-
-@keyframes wildShimmer {
-  0%, 100% { box-shadow: 0 0 16px rgba(255,200,60,0.5), 0 3px 10px rgba(0,0,0,0.4); }
-  50%       { box-shadow: 0 0 28px rgba(255,200,60,0.8), 0 3px 10px rgba(0,0,0,0.4); }
+@keyframes wildPulse {
+  0%,100% { box-shadow: 0 0 14px rgba(217,119,6,0.5), 0 3px 10px rgba(0,0,0,0.4); }
+  50%     { box-shadow: 0 0 28px rgba(217,119,6,0.85), 0 3px 10px rgba(0,0,0,0.4); }
 }
 
 /* Glowing (showdown winner) */
 .playing-card.glowing {
-  box-shadow: 0 0 20px rgba(255,200,60,0.7), 0 3px 10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.9);
-  animation: cardDeal 0.35s both, goldPulse 1.5s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(250,176,5,0.7), 0 3px 10px rgba(0,0,0,0.4);
+  animation: cardDeal 0.3s both, goldPulse 1.4s ease-in-out infinite;
 }
 
 .playing-card.empty {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  animation: none;
+  background: transparent; border: none; box-shadow: none; animation: none;
 }
 
-/* ── Rank and suit layout ─────────────────────────────────── */
+/* ── Corners ─────────────────────────────────────────────── */
 .card-corner {
+  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
-  line-height: 1;
-  z-index: 2;
-  position: relative;
-}
-
-.card-corner-bottom { transform: rotate(180deg); }
-
-.card-rank {
-  font-weight: 900;
-  color: var(--suit-color, #333);
-  font-size: 1em;
   line-height: 1.1;
-  text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+  z-index: 3;
+}
+.card-corner.tl { top: 3px; left: 4px; }
+.card-corner.br { bottom: 3px; right: 4px; transform: rotate(180deg); }
+
+.c-rank {
+  display: block;
+  font-weight: 900;
+  color: var(--suit-color);
+  font-family: 'Georgia', serif;
+  line-height: 1;
+}
+.c-suit {
+  display: block;
+  color: var(--suit-color);
+  line-height: 1;
 }
 
-.card-suit-small { font-size: 0.85em; line-height: 1; }
+.playing-card.small    .c-rank { font-size: 0.68rem; }
+.playing-card.small    .c-suit { font-size: 0.6rem;  }
+.playing-card.normal   .c-rank { font-size: 0.8rem;  }
+.playing-card.normal   .c-suit { font-size: 0.72rem; }
+.playing-card.community .c-rank{ font-size: 0.9rem;  }
+.playing-card.community .c-suit{ font-size: 0.82rem; }
+.playing-card.large    .c-rank { font-size: 1.05rem; }
+.playing-card.large    .c-suit { font-size: 0.95rem; }
 
-.card-center {
+/* ── Center pip / art area ───────────────────────────────── */
+.card-center-area {
   position: absolute;
   inset: 0;
   display: flex;
@@ -136,35 +103,58 @@
   z-index: 2;
 }
 
-.card-suit-large  { font-size: 1.6em; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)); }
-.card-face-icon   { font-size: 1.5em; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)); }
-
-.playing-card.community .card-suit-large { font-size: 2em; }
-.playing-card.community .card-face-icon  { font-size: 1.9em; }
-.playing-card.large .card-suit-large     { font-size: 2.2em; }
-.playing-card.large .card-face-icon      { font-size: 2.1em; }
-
-.card-wild-badge {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255,200,60,0.92);
-  color: #000;
-  font-size: 0.42em;
-  font-weight: 900;
-  padding: 1px 5px;
-  border-radius: 3px;
-  letter-spacing: 0.05em;
-  z-index: 6;
+/* Pip layout */
+.pip-grid {
+  position: relative;
+  width: 75%;
+  height: 78%;
 }
 
-.card-promoted-badge,
-.card-suit-override-badge {
+.pip {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: var(--suit-color);
+  font-family: serif;
+  line-height: 1;
+}
+
+.playing-card.small     .pip { font-size: 0.5rem; }
+.playing-card.normal    .pip { font-size: 0.6rem; }
+.playing-card.community .pip { font-size: 0.75rem; }
+.playing-card.large     .pip { font-size: 0.85rem; }
+
+/* Face card / Ace SVG art */
+.face-art, .card-back-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.ace-art text { font-family: 'Georgia', serif; }
+
+/* ── Badges ──────────────────────────────────────────────── */
+.wild-badge {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #d97706;
+  color: #fff;
+  font-size: 0.38em;
+  font-weight: 900;
+  padding: 1px 4px;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+  z-index: 6;
+  white-space: nowrap;
+}
+
+.promo-badge, .suit-override-badge {
   position: absolute;
   top: 2px;
   right: 3px;
-  font-size: 0.55em;
-  opacity: 0.65;
+  font-size: 0.5em;
+  opacity: 0.6;
   z-index: 6;
+  color: var(--suit-color);
 }

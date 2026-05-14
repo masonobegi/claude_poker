@@ -101,6 +101,7 @@ class GameRoom {
     this.hostId = null;
     this.handCount = 0;
     this.lastHandRunnerUp = null;
+    this.readyPlayers = new Set(); // players who clicked Skip during a window phase
   }
 
   // ── Player Management ──────────────────────────────────────────────────────
@@ -313,9 +314,30 @@ class GameRoom {
     this.broadcastState(); // push updated phaseDeadline to clients
   }
 
+  skipPhase(playerId) {
+    const SKIPPABLE = new Set(['before_deal','before_preflop','after_flop_before_action',
+      'after_turn','after_river_before_action','after_river','hand_complete']);
+    if (!SKIPPABLE.has(this.phase) || !this._phaseNextFn) return { error: 'Cannot skip now' };
+    const p = this.players.find(pl => pl.id === playerId);
+    if (!p || p.eliminated) return { error: 'Invalid player' };
+    this.readyPlayers.add(playerId);
+    const humanActive = this.players.filter(pl => !pl.isBot && !pl.eliminated && pl.chips > 0);
+    this.broadcast('game:skipVotes', {
+      count: this.readyPlayers.size,
+      total: humanActive.length,
+      votes: [...this.readyPlayers],
+    });
+    if (humanActive.length > 0 && humanActive.every(pl => this.readyPlayers.has(pl.id))) {
+      clearTimeout(this.phaseTimer);
+      this._phaseNextFn();
+    }
+    return { ok: true };
+  }
+
   _setPhase(phase) {
     clearTimeout(this.phaseTimer);
     this._phaseNextFn = null;
+    this.readyPlayers = new Set();
     this.phase = phase;
     const duration = PHASE_DURATION[phase];
     this.phaseDeadline = duration ? Date.now() + duration : null;
@@ -883,7 +905,7 @@ class GameRoom {
 
     // If this is a coin-call card and no call provided, prompt human
     if (card.requiresInput === 'coin_call' && !opts.coinCall && !player.isBot) {
-      this.io.to(playerId).emit('game:coinCallPrompt', { cardName: card.name });
+      this.io.to(playerId).emit('game:coinCallPrompt', { cardName: card.name, instanceId });
       this.pendingPowerCard = { playerId, instanceId, opts };
       return { ok: true, pending: true };
     }

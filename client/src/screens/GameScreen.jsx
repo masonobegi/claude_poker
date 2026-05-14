@@ -1,4 +1,25 @@
 import React, { useState } from 'react';
+
+const SKIPPABLE_PHASES = new Set([
+  'before_deal','before_preflop','after_flop_before_action',
+  'after_turn','after_river_before_action','after_river','hand_complete',
+]);
+
+function SkipButton({ phase, skipVotes, onSkip, playerId }) {
+  if (!SKIPPABLE_PHASES.has(phase)) return null;
+  const alreadyVoted = skipVotes?.votes?.includes(playerId);
+  return (
+    <button
+      className={`skip-btn ${alreadyVoted ? 'voted' : ''}`}
+      onClick={onSkip}
+      disabled={alreadyVoted}
+      title="Vote to skip the countdown"
+    >
+      {alreadyVoted ? '✓ Ready' : '⏭ Skip'}
+      {skipVotes && <span className="skip-count"> {skipVotes.count}/{skipVotes.total}</span>}
+    </button>
+  );
+}
 import PokerTable from '../components/table/PokerTable';
 import BettingControls from '../components/actions/BettingControls';
 import PowerCardHand from '../components/powerCards/PowerCardHand';
@@ -21,6 +42,7 @@ import './GameScreen.css';
 export default function GameScreen({
   gameState, playerId, gameLog, notification,
   winChoiceData, rankPrompt, coinPrompt, reactiveWindow, reactiveQueue,
+  skipVotes, onSkipPhase,
   spinnerData, spellBurst, onSpellBurstDone, cardEvents, needSell, onSpinnerClose, actions, audioEngine,
 }) {
   const [selectedCard, setSelectedCard] = useState(null);
@@ -69,6 +91,7 @@ export default function GameScreen({
         <div className="game-hud-left">
           <PhaseIndicator phase={gameState.phase} />
           <ModsIndicator mods={gameState.mods} wildRanks={gameState.wildRanks} disabledRanks={gameState.disabledRanks} />
+          <SkipButton phase={gameState.phase} skipVotes={skipVotes} onSkip={onSkipPhase} playerId={playerId} />
         </div>
 
         <div className="game-hud-center">

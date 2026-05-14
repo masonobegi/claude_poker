@@ -104,6 +104,13 @@ io.on('connection', (socket) => {
     if (result?.error) socket.emit('game:error', { message: result.error });
   });
 
+  // ── Skip phase ────────────────────────────────────────────────────────────
+  socket.on('game:skipPhase', () => {
+    const room = getRoom(socket.data.roomCode);
+    if (!room) return;
+    room.skipPhase(socket.id);
+  });
+
   // ── Reactive window (Veto / Copy Machine) ─────────────────────────────────
   socket.on('game:reactivePlay', ({ instanceId }) => {
     const room = getRoom(socket.data.roomCode);

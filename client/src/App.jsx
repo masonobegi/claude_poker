@@ -21,6 +21,7 @@ export default function App() {
   const [coinPrompt, setCoinPrompt] = useState(null);     // { cardName, instanceId }
   const [reactiveWindow, setReactiveWindow] = useState(null);
   const [reactiveQueue, setReactiveQueue] = useState([]); // queued spells waiting for veto
+  const [skipVotes, setSkipVotes] = useState(null); // { count, total, votes }
   const [spinnerData, setSpinnerData] = useState(null);
   const [needSell, setNeedSell] = useState(false);
   const [spellBurst, setSpellBurst] = useState(false);
@@ -89,6 +90,12 @@ export default function App() {
     });
     socket.on('game:reactiveQueued', (data) => {
       setReactiveQueue(prev => [...prev, data]);
+    });
+    socket.on('game:skipVotes', (data) => {
+      setSkipVotes(data);
+    });
+    socket.on('game:phaseChange', () => {
+      setSkipVotes(null); // clear on phase change
     });
     socket.on('game:rankBagPrompt', ({ drawnRanks, instanceId: iid }) => {
       setRankPrompt({ drawnRanks, instanceId: iid });
@@ -177,6 +184,8 @@ export default function App() {
       coinPrompt={coinPrompt}
       reactiveWindow={reactiveWindow}
       reactiveQueue={reactiveQueue}
+      skipVotes={skipVotes}
+      onSkipPhase={() => socket.emit('game:skipPhase')}
       spinnerData={spinnerData}
       spellBurst={spellBurst}
       onSpellBurstDone={() => setSpellBurst(false)}

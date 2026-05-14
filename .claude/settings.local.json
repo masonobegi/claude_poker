@@ -12,7 +12,13 @@
       "Bash(git rm *)",
       "Bash(git reset *)",
       "Bash(git update-ref *)",
-      "Bash(gh repo *)"
+      "Bash(gh repo *)",
+      "Bash(node server/src/index.js)",
+      "Bash(netstat -ano)",
+      "Bash(findstr \":3001\")",
+      "Bash(node -e \"require\\('./server/src/game/GameRoom'\\); console.log\\('OK'\\)\")",
+      "Bash(findstr \":3001.*LISTENING\")",
+      "Bash(taskkill /PID 12116 /F)"
     ],
     "additionalDirectories": [
       "C:\\Users\\mason\\OneDrive\\Desktop\\poker_for_wizards_claude\\.git"
