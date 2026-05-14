@@ -852,6 +852,7 @@ class GameRoom {
   _resolveBounties() {
     for (const p of this.players) {
       if (p.id !== this.winnerInfo?.winnerId) continue;
+      if (!p.bestHand) continue; // no showdown — bounties don't apply to fold wins
       const bounties = p.powerCards.filter(c => c.type === CARD_TYPE.BOUNTY);
       for (const bounty of bounties) {
         const result = resolveEffect(this._gameState(), p.id, bounty, {});
@@ -877,6 +878,22 @@ class GameRoom {
     const isReactive = !!(this.reactiveWindow && !this.reactiveWindow.resolved);
     if (!canPlayCard(card, this.phase, isReactive)) {
       return { error: 'Cannot play this card right now' };
+    }
+
+    // Bounty cards: only the hand winner can play them, and only after a showdown
+    if (card.type === CARD_TYPE.BOUNTY) {
+      if (this.winnerInfo?.winnerId !== playerId) {
+        return { error: 'Only the hand winner can play bounty cards' };
+      }
+      if (!player.bestHand) {
+        return { error: 'Bounties only apply when you won a showdown, not a fold-out win' };
+      }
+    }
+
+    // If card needs a target card and none provided (e.g. bot tried on empty board), skip silently
+    if ((card.requiresInput === 'card_and_direction' || card.requiresInput === 'card_and_suit') &&
+        !opts.targetCardId) {
+      return { error: 'No valid card to target' };
     }
 
     // ANYTIME cards during betting phases may only be played on your own turn
@@ -999,6 +1016,26 @@ class GameRoom {
         this._closeReactiveWindow();
       }
     }, REACTIVE_WINDOW_MS);
+
+    // Bots get a chance to Veto or Copy after a short think delay
+    setTimeout(() => {
+      if (!this.reactiveWindow || this.reactiveWindow.resolved) return;
+      for (const p of this.players.filter(p => p.isBot && !p.eliminated)) {
+        const vetoCard = p.powerCards.find(c => c.definitionId === 'veto');
+        const copyCard = p.powerCards.find(c => c.definitionId === 'copy_machine');
+        const react = vetoCard && Math.random() < 0.25 ? vetoCard
+                    : copyCard && Math.random() < 0.25 ? copyCard : null;
+        if (react) {
+          const isVeto = react.definitionId === 'veto';
+          const result = this.playPowerCard(p.id, react.instanceId, {});
+          if (!result?.error) {
+            if (isVeto) this._restoreSpellSnapshot();
+            this._closeReactiveWindow();
+            return; // one reaction per window
+          }
+        }
+      }
+    }, BOT_ACTION_DELAY_MS);
   }
 
   // ── Veto snapshot system ──────────────────────────────────────────────────

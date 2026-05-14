@@ -19,7 +19,8 @@
       "Bash(node -e \"require\\('./server/src/game/GameRoom'\\); console.log\\('OK'\\)\")",
       "Bash(findstr \":3001.*LISTENING\")",
       "Bash(taskkill /PID 12116 /F)",
-      "Bash(xargs taskkill *)"
+      "Bash(xargs taskkill *)",
+      "Bash(node sim-test.js)"
     ],
     "additionalDirectories": [
       "C:\\Users\\mason\\OneDrive\\Desktop\\poker_for_wizards_claude\\.git"

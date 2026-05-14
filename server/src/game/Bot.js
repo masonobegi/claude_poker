@@ -35,9 +35,13 @@ class Bot {
 
   // Returns null if no card to play, or { card, opts }
   decidePowerCardPlay(game, phase, isReactiveWindow) {
-    const playable = this.player.powerCards.filter(c =>
-      canPlayCard(c, phase, isReactiveWindow)
-    );
+    const playable = this.player.powerCards.filter(c => {
+      // Bounty cards: only try if this bot is the hand winner AND had a showdown
+      if (c.type === 'BOUNTY') {
+        return game.winnerInfo?.winnerId === this.player.id && !!this.player.bestHand;
+      }
+      return canPlayCard(c, phase, isReactiveWindow);
+    });
     if (playable.length === 0) return null;
 
     // Only play with 40% chance per decision point (to not spam)
@@ -84,7 +88,8 @@ class Bot {
         const allCards = [
           ...game.communityCards.map((c, i) => `community_${i}`),
           ...this.player.holeCards.map((c, i) => `hole_${this.player.id}_${i}`),
-        ];
+        ].filter(Boolean);
+        if (allCards.length === 0) return {};
         return {
           targetCardId: allCards[Math.floor(Math.random() * allCards.length)],
           direction: Math.random() < 0.5 ? 'up' : 'down',
@@ -95,7 +100,8 @@ class Bot {
         const allCards = [
           ...game.communityCards.map((c, i) => `community_${i}`),
           ...this.player.holeCards.map((c, i) => `hole_${this.player.id}_${i}`),
-        ];
+        ].filter(Boolean);
+        if (allCards.length === 0) return {};
         return {
           targetCardId: allCards[Math.floor(Math.random() * allCards.length)],
           suit: suits[Math.floor(Math.random() * suits.length)],

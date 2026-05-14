@@ -486,19 +486,24 @@ function handContainsSeven(hand, player) {
 }
 
 // Find a card in community cards or player's own hole cards by a unique identifier
+// cardId format: 'community_<index>'  or  'hole_<playerId>_<cardIndex>'
+// NOTE: playerId may contain underscores (e.g. 'bot_abc123'), so we take the
+// LAST underscore-separated token as the card index and everything before it as the pid.
 function findCardInPlay(game, cardId) {
-  // cardId format: 'community_<index>' or 'hole_<playerId>_<index>'
   if (!cardId) return null;
 
   if (cardId.startsWith('community_')) {
-    const idx = parseInt(cardId.split('_')[1]);
-    if (idx >= 0 && idx < game.communityCards.length) {
+    const idx = parseInt(cardId.slice('community_'.length));
+    if (!isNaN(idx) && idx >= 0 && idx < game.communityCards.length) {
       return { card: game.communityCards[idx], location: 'community', index: idx };
     }
   } else if (cardId.startsWith('hole_')) {
-    const parts = cardId.split('_');
-    const pid = parts[1];
-    const idx = parseInt(parts[2]);
+    const rest = cardId.slice(5); // strip 'hole_'
+    const lastUnderscore = rest.lastIndexOf('_');
+    if (lastUnderscore === -1) return null;
+    const pid = rest.slice(0, lastUnderscore);
+    const idx = parseInt(rest.slice(lastUnderscore + 1));
+    if (isNaN(idx)) return null;
     const p = game.players.find(pl => pl.id === pid);
     if (p && idx >= 0 && idx < p.holeCards.length) {
       return { card: p.holeCards[idx], location: 'hole', player: p, index: idx };
