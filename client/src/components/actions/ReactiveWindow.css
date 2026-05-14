@@ -1,0 +1,107 @@
+.reactive-banner {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { transform: translateX(-50%) translateY(-100%); }
+  to   { transform: translateX(-50%) translateY(0); }
+}
+
+.reactive-content {
+  background: linear-gradient(135deg, #1a0840, #2a0060);
+  border: 1px solid rgba(200,100,255,0.6);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  padding: 0.75rem 1.5rem;
+  min-width: 380px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 30px rgba(180,80,255,0.3);
+}
+
+.reactive-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #cc88ff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.reactive-timer {
+  margin-left: auto;
+  background: rgba(255,255,255,0.1);
+  padding: 1px 8px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.reactive-desc {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 0.5rem;
+}
+
+.reactive-card-name {
+  color: #cc88ff;
+  font-weight: 600;
+}
+
+.reactive-timer-bar {
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.reactive-timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #9944ff, #dd88ff);
+  transition: width 0.2s linear;
+}
+
+.reactive-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.reactive-btn {
+  padding: 0.4rem 0.8rem;
+  background: linear-gradient(135deg, rgba(120,40,220,0.6), rgba(80,20,160,0.8));
+  border: 1px solid rgba(180,100,255,0.6);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.reactive-btn:hover {
+  background: linear-gradient(135deg, rgba(140,60,240,0.8), rgba(100,40,200,0.9));
+  box-shadow: 0 0 12px rgba(160,80,255,0.5);
+}
+
+.reactive-skip {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  color: var(--text-muted);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-left: auto;
+}
+
+.reactive-skip:hover {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+}

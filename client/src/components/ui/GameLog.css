@@ -1,0 +1,68 @@
+.gamelog-drawer {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 300px;
+  background: rgba(10,5,25,0.97);
+  border-left: 1px solid rgba(255,255,255,0.08);
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.gamelog-drawer.open {
+  transform: translateX(0);
+  box-shadow: -8px 0 30px rgba(0,0,0,0.5);
+}
+
+.gamelog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+}
+
+.gamelog-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: color 0.15s;
+}
+
+.gamelog-close:hover { color: #fff; }
+
+.gamelog-entries {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.gamelog-entry {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.gamelog-time {
+  color: rgba(255,255,255,0.25);
+  flex-shrink: 0;
+  font-family: monospace;
+  font-size: 0.7rem;
+}
+
+.gamelog-msg {
+  color: rgba(255,255,255,0.65);
+}

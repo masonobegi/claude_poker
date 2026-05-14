@@ -1,0 +1,111 @@
+.poker-table-wrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.poker-felt {
+  width: 82%;
+  height: 80%;
+  max-width: 880px;
+  max-height: 480px;
+  border-radius: 50%;
+  position: relative;
+  background: radial-gradient(ellipse at center,
+    #0f5c2e 0%,
+    #0a4a25 40%,
+    #083a1d 70%,
+    #062e17 100%
+  );
+  box-shadow:
+    0 0 0 12px #2d1a0e,
+    0 0 0 16px #1a0e07,
+    0 0 60px rgba(0,0,0,0.8),
+    inset 0 0 80px rgba(0,0,0,0.3);
+}
+
+.poker-felt::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.06);
+  pointer-events: none;
+}
+
+/* Subtle wizard pattern overlay */
+.poker-felt::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image: radial-gradient(circle at 30% 30%, rgba(120,60,220,0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 70%, rgba(60,20,120,0.08) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.poker-felt-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.poker-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.poker-mod-badge {
+  background: rgba(0,0,0,0.7);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(255,200,60,0.5);
+}
+
+.poker-seat-anchor {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.poker-bet-chip-anchor {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+  pointer-events: none;
+}
+
+.poker-bet-chip {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(0,0,0,0.75);
+  border: 1px solid rgba(255,200,60,0.5);
+  border-radius: 12px;
+  padding: 3px 8px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  animation: betPop 0.2s ease-out;
+}
+
+@keyframes betPop {
+  from { transform: scale(0.7); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.poker-bet-chip-coin { font-size: 0.85rem; }
+.poker-bet-chip-amount {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--gold);
+}

@@ -1,0 +1,90 @@
+.gameover-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+}
+
+.gameover-modal {
+  background: linear-gradient(160deg, #1a0840, #0e0525);
+  border: 1px solid rgba(255,200,60,0.4);
+  border-radius: 20px;
+  padding: 2.5rem;
+  text-align: center;
+  min-width: 320px;
+  box-shadow: 0 0 60px rgba(255,200,60,0.1), 0 20px 60px rgba(0,0,0,0.8);
+}
+
+.gameover-icon {
+  font-size: 3.5rem;
+  animation: trophyPop 0.5s ease-out;
+  margin-bottom: 0.5rem;
+}
+
+@keyframes trophyPop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.gameover-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--gold);
+  margin: 0 0 0.25rem;
+  text-shadow: 0 0 20px rgba(255,200,60,0.4);
+}
+
+.gameover-subtitle {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.25rem;
+}
+
+.gameover-standings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.gameover-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+}
+
+.gameover-row.me {
+  background: rgba(120,60,220,0.15);
+  border: 1px solid rgba(120,60,220,0.3);
+}
+
+.gameover-rank { font-size: 1.1rem; width: 28px; }
+.gameover-name { flex: 1; font-size: 0.9rem; }
+.gameover-chips { color: var(--gold); font-weight: 700; font-size: 0.9rem; }
+
+.gameover-reload {
+  width: 100%;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+  border: 1px solid var(--purple-light);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gameover-reload:hover {
+  box-shadow: 0 0 20px rgba(140,80,255,0.4);
+}

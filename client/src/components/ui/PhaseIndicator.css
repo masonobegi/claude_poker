@@ -1,0 +1,29 @@
+.phase-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--phase-color, #888);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.6rem;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid color-mix(in srgb, var(--phase-color) 30%, transparent);
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.phase-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--phase-color, #888);
+  box-shadow: 0 0 6px var(--phase-color, #888);
+  animation: phasePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes phasePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}

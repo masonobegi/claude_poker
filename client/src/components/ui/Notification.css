@@ -1,0 +1,28 @@
+.notification {
+  position: fixed;
+  bottom: 220px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 600;
+  background: rgba(20,10,50,0.95);
+  border-radius: 12px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  animation: notifIn 0.25s ease-out;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+@keyframes notifIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.notification-info    { border-color: rgba(100,160,255,0.4); color: #a0c8ff; }
+.notification-warning { border-color: rgba(255,180,0,0.4);  color: var(--gold); }
+.notification-error   { border-color: rgba(255,80,80,0.4);  color: #ff9090; }
+.notification-orbit   { border-color: rgba(180,100,255,0.5); color: #cc88ff; }
+.notification-prophecy{ border-color: rgba(100,220,255,0.4); color: #80ddff; }

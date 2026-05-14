@@ -1,0 +1,114 @@
+.winchoice-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 250;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+}
+
+.winchoice-modal {
+  background: linear-gradient(160deg, #1a0840, #0e0525);
+  border: 1px solid rgba(255,200,60,0.5);
+  border-radius: 20px;
+  padding: 2rem;
+  width: min(440px, 92vw);
+  box-shadow: 0 0 60px rgba(255,200,60,0.15), 0 20px 60px rgba(0,0,0,0.7);
+}
+
+.winchoice-header {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(255,200,60,0.4);
+}
+
+.winchoice-subtitle {
+  text-align: center;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
+.winchoice-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.winchoice-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: rgba(255,255,255,0.03);
+}
+
+.winchoice-option:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,200,60,0.3);
+}
+
+.winchoice-option.selected {
+  background: rgba(255,200,60,0.08);
+  border-color: rgba(255,200,60,0.6);
+  box-shadow: 0 0 16px rgba(255,200,60,0.15);
+}
+
+.winchoice-option-icon { font-size: 1.8rem; }
+
+.winchoice-option-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.winchoice-option-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.winchoice-steal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.winchoice-note {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.winchoice-confirm {
+  width: 100%;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, var(--gold), #cc8800);
+  border: 1px solid rgba(255,200,60,0.6);
+  border-radius: 10px;
+  color: #000;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.winchoice-confirm:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(255,200,60,0.4);
+}
+
+.winchoice-confirm:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -1,0 +1,32 @@
+.current-hand-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: rgba(0,0,0,0.55);
+  border: 1px solid color-mix(in srgb, var(--hand-color) 40%, transparent);
+  border-radius: 10px;
+  padding: 5px 12px;
+  text-align: center;
+  animation: handFadeIn 0.3s ease-out;
+}
+
+@keyframes handFadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.chd-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+
+.chd-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--hand-color);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--hand-color) 50%, transparent);
+  white-space: nowrap;
+}

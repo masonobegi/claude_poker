@@ -1,0 +1,70 @@
+.power-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 66px;
+  padding: 6px 4px 5px;
+  background: linear-gradient(160deg, rgba(30,10,60,0.95), rgba(15,5,35,0.98));
+  border: 1px solid var(--type-color, #888);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  user-select: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  position: relative;
+}
+
+.power-tile.playable {
+  box-shadow: 0 0 12px color-mix(in srgb, var(--type-color) 50%, transparent),
+              0 2px 8px rgba(0,0,0,0.5);
+}
+
+.power-tile.playable:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--type-color) 70%, transparent),
+              0 8px 16px rgba(0,0,0,0.5);
+}
+
+.power-tile.dimmed {
+  opacity: 0.45;
+  filter: grayscale(0.5);
+}
+
+.power-tile.must-sell {
+  border-color: #ff6060;
+  animation: sellPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes sellPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255,60,60,0.4); }
+  50%       { box-shadow: 0 0 18px rgba(255,60,60,0.8); }
+}
+
+.power-tile-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.power-tile-name {
+  font-size: 0.55rem;
+  text-align: center;
+  color: var(--type-color, #aaa);
+  line-height: 1.2;
+  font-weight: 600;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.power-tile-sell-badge {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff4040;
+  color: #fff;
+  font-size: 0.5rem;
+  font-weight: 900;
+  padding: 1px 5px;
+  border-radius: 4px;
+}

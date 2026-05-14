@@ -1,0 +1,147 @@
+.pcmodal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.pcmodal {
+  background: linear-gradient(160deg, #1a0a40, #0e0525);
+  border: 1px solid var(--type-color, #888);
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: min(400px, 92vw);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--type-color) 30%, transparent),
+              0 20px 60px rgba(0,0,0,0.7);
+}
+
+.pcmodal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.pcmodal-icon { font-size: 2rem; }
+
+.pcmodal-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.pcmodal-type {
+  font-size: 0.7rem;
+  color: var(--type-color);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pcmodal-sell-value {
+  margin-left: auto;
+  color: var(--gold);
+  font-size: 0.8rem;
+}
+
+.pcmodal-desc {
+  color: rgba(255,255,255,0.75);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  border-left: 2px solid var(--type-color);
+  padding-left: 0.75rem;
+}
+
+.pcmodal-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.pcmodal-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pcmodal-select {
+  padding: 0.5rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.pcmodal-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.pcmodal-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.pcmodal-note {
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.pcmodal-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pcmodal-btn {
+  flex: 1;
+  padding: 0.65rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid;
+  min-width: 80px;
+}
+
+.pcmodal-play {
+  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+  border-color: var(--purple-light);
+  color: #fff;
+}
+.pcmodal-play:hover:not(:disabled) {
+  box-shadow: 0 0 16px rgba(140,80,255,0.5);
+}
+.pcmodal-play:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.pcmodal-sell {
+  background: rgba(255,170,0,0.15);
+  border-color: rgba(255,170,0,0.4);
+  color: var(--gold);
+}
+.pcmodal-sell:hover { background: rgba(255,170,0,0.3); }
+
+.pcmodal-cancel {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.1);
+  color: var(--text-muted);
+}
+.pcmodal-cancel:hover { background: rgba(255,255,255,0.1); color: #fff; }

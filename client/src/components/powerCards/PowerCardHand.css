@@ -1,0 +1,16 @@
+.power-hand {
+  display: flex;
+  gap: 0.4rem;
+  align-items: flex-end;
+  justify-content: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 0 0.5rem;
+  max-width: 100%;
+}
+
+.power-hand-empty {
+  color: rgba(255,255,255,0.2);
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+}

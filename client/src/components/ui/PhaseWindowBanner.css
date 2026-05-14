@@ -1,0 +1,73 @@
+.phase-window-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: rgba(20, 8, 50, 0.92);
+  border: 1px solid rgba(140, 80, 255, 0.35);
+  border-radius: 10px;
+  padding: 0.5rem 0.9rem;
+  width: 100%;
+  max-width: 560px;
+  animation: bannerIn 0.3s ease-out;
+}
+
+@keyframes bannerIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.phase-window-banner.has-playable {
+  border-color: rgba(180, 100, 255, 0.7);
+  box-shadow: 0 0 16px rgba(140, 80, 255, 0.2);
+}
+
+.pwb-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.pwb-icon { font-size: 1.1rem; }
+
+.pwb-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #cc88ff;
+}
+
+.pwb-desc {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.pwb-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  min-width: 60px;
+}
+
+.pwb-timer {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #cc88ff;
+  font-variant-numeric: tabular-nums;
+}
+
+.pwb-bar-wrap {
+  width: 60px;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pwb-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple), #cc88ff);
+  transition: width 0.25s linear;
+  border-radius: 2px;
+}

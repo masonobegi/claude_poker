@@ -1,0 +1,82 @@
+.rank-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 350;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.rank-modal {
+  background: linear-gradient(160deg, #1a0840, #0e0525);
+  border: 1px solid rgba(140,80,255,0.5);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  min-width: 280px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+}
+
+.rank-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--purple-light);
+  margin-bottom: 0.4rem;
+}
+
+.rank-desc {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.rank-options {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.rank-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  border: 2px solid rgba(180,120,255,0.3);
+  background: rgba(180,120,255,0.08);
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: monospace;
+}
+
+.rank-btn:hover {
+  border-color: rgba(180,120,255,0.7);
+  background: rgba(180,120,255,0.2);
+}
+
+.rank-btn.selected {
+  border-color: var(--purple-light);
+  background: rgba(140,80,255,0.3);
+  box-shadow: 0 0 16px rgba(140,80,255,0.4);
+  color: var(--gold);
+}
+
+.rank-confirm {
+  width: 100%;
+  padding: 0.7rem;
+  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+  border: 1px solid var(--purple-light);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.rank-confirm:disabled { opacity: 0.4; cursor: not-allowed; }
+.rank-confirm:hover:not(:disabled) { box-shadow: 0 0 14px rgba(140,80,255,0.4); }

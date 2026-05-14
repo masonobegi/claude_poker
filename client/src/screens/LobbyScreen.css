@@ -1,0 +1,218 @@
+.lobby-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.lobby-loading {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 4rem;
+}
+
+.lobby-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.lobby-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lobby-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--gold);
+  margin: 0;
+}
+
+.lobby-code-block {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  margin-top: 0.25rem;
+}
+
+.lobby-code-label {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.lobby-code {
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  color: var(--gold);
+  font-family: monospace;
+}
+
+.lobby-copy-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.lobby-copy-btn:hover { opacity: 1; }
+
+.lobby-section-title {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.75rem;
+}
+
+.lobby-players {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem;
+}
+
+.lobby-player-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lobby-player {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.lobby-player.me {
+  border-color: var(--purple-light);
+  background: rgba(120, 60, 220, 0.1);
+}
+
+.lobby-player-icon { font-size: 1.2rem; }
+.lobby-player-name { flex: 1; font-size: 0.95rem; }
+.lobby-player-you { color: var(--text-muted); font-size: 0.8rem; }
+.lobby-player-host { font-size: 0.9rem; }
+
+.lobby-remove-bot {
+  background: none;
+  border: 1px solid rgba(255,80,80,0.3);
+  color: rgba(255,80,80,0.7);
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.lobby-remove-bot:hover {
+  background: rgba(255,80,80,0.2);
+  color: #ff6060;
+}
+
+.lobby-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lobby-btn {
+  padding: 0.85rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid;
+}
+
+.lobby-btn-primary {
+  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+  border-color: var(--purple-light);
+  color: #fff;
+}
+
+.lobby-btn-primary:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(140, 80, 255, 0.4);
+}
+
+.lobby-btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.lobby-btn-secondary {
+  background: rgba(255,255,255,0.05);
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+.lobby-btn-secondary:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.lobby-waiting {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 0.75rem;
+}
+
+.lobby-waiting-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--purple-light);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.lobby-info {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.lobby-info-item {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}

@@ -1,0 +1,175 @@
+.player-seat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 100px;
+  transition: opacity 0.3s;
+}
+
+.player-seat.folded { opacity: 0.45; }
+.player-seat.eliminated { opacity: 0.25; }
+
+.player-badges {
+  display: flex;
+  gap: 3px;
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
+.badge {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 0.55rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0,0,0,0.4);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.badge-dealer {
+  background: #f0d060;
+  color: #000;
+}
+
+.badge-sb {
+  background: #a0c8ff;
+  color: #000;
+}
+
+.badge-bb {
+  background: #ffb060;
+  color: #000;
+}
+
+.player-cards {
+  display: flex;
+  gap: 3px;
+}
+
+.card-slot-empty {
+  width: 38px;
+  height: 54px;
+  border-radius: 5px;
+  border: 1px dashed rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.2);
+}
+
+.player-info {
+  text-align: center;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 3px 8px;
+  min-width: 80px;
+}
+
+.player-seat.me .player-info {
+  border-color: rgba(120,80,220,0.5);
+  background: rgba(30,10,60,0.85);
+}
+
+.player-seat.active .player-info {
+  border-color: rgba(255,200,60,0.6);
+  box-shadow: 0 0 12px rgba(255,200,60,0.2);
+}
+
+.player-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90px;
+  color: #e0e0e0;
+}
+
+.player-card-count {
+  font-size: 0.65rem;
+  color: var(--gold);
+  margin-left: 2px;
+}
+
+.player-chips {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.player-bet {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.72rem;
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.75);
+  border-radius: 10px;
+  padding: 2px 6px;
+  white-space: nowrap;
+  border: 1px solid rgba(255,200,60,0.2);
+}
+
+.player-bet-chip { font-size: 0.7rem; }
+.player-bet-amount { color: var(--gold); font-weight: 600; }
+
+.player-status-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.75);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.6);
+  pointer-events: none;
+}
+
+.player-status-overlay.allin {
+  background: rgba(255,100,0,0.8);
+  border-color: rgba(255,160,0,0.6);
+  color: #fff;
+}
+
+.player-status-overlay.bust {
+  background: rgba(120,0,0,0.8);
+  color: #ff9090;
+}
+
+.player-best-hand {
+  font-size: 0.65rem;
+  color: var(--gold);
+  background: rgba(0,0,0,0.8);
+  border: 1px solid rgba(255,200,60,0.3);
+  border-radius: 6px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+.player-active-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 12px;
+  border: 2px solid rgba(255,200,60,0.7);
+  box-shadow: 0 0 12px rgba(255,200,60,0.3);
+  pointer-events: none;
+  animation: activeRing 1.2s ease-in-out infinite;
+}
+
+@keyframes activeRing {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
