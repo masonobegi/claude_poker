@@ -102,6 +102,7 @@ class GameRoom {
     this.handCount = 0;
     this.lastHandRunnerUp = null;
     this.readyPlayers = new Set(); // players who clicked Skip during a window phase
+    this._spellSnapshot = null;   // state snapshot taken before each spell, for Veto undo
   }
 
   // ── Player Management ──────────────────────────────────────────────────────
@@ -916,6 +917,11 @@ class GameRoom {
       this.pendingPowerCard = null;
     }
 
+    const isSpell = card.type === CARD_TYPE.SPELL && card.definitionId !== 'veto' && card.definitionId !== 'copy_machine';
+
+    // Snapshot game state BEFORE applying the effect so Veto can fully undo it
+    if (isSpell) this._takeSpellSnapshot();
+
     // Apply effect
     const result = resolveEffect(this._gameState(), playerId, card, opts);
     if (!result.success) return { error: result.message };
@@ -924,9 +930,7 @@ class GameRoom {
     player.powerCards.splice(cardIdx, 1);
     this.powerDeck.discard(card);
 
-    const isSpell = card.type === CARD_TYPE.SPELL && card.definitionId !== 'veto' && card.definitionId !== 'copy_machine';
-
-    // Track last spell for reactive window
+    // Open reactive (veto) window for spells
     if (isSpell) {
       this.lastPlayedSpell = { card, playerId, opts };
       this._openReactiveWindow(card, playerId);
@@ -995,6 +999,44 @@ class GameRoom {
         this._closeReactiveWindow();
       }
     }, REACTIVE_WINDOW_MS);
+  }
+
+  // ── Veto snapshot system ──────────────────────────────────────────────────
+
+  _takeSpellSnapshot() {
+    this._spellSnapshot = {
+      communityCards: this.communityCards.map(c => ({ ...c })),
+      mods: { ...this.mods },
+      wildRanks: [...this.wildRanks],
+      disabledRanks: [...this.disabledRanks],
+      players: this.players.map(p => ({
+        id: p.id,
+        chips: p.chips,
+        holeCards: p.holeCards.map(c => ({ ...c })),
+        eyePatchIndex: p.eyePatchIndex,
+        revealedHoleCardIndices: [...(p.revealedHoleCardIndices || [])],
+        powerCards: [...p.powerCards],
+      })),
+    };
+  }
+
+  _restoreSpellSnapshot() {
+    const snap = this._spellSnapshot;
+    if (!snap) return;
+    this.communityCards = snap.communityCards;
+    this.mods = snap.mods;
+    this.wildRanks = snap.wildRanks;
+    this.disabledRanks = snap.disabledRanks;
+    for (const ps of snap.players) {
+      const p = this.players.find(pl => pl.id === ps.id);
+      if (!p) continue;
+      p.chips = ps.chips;
+      p.holeCards = ps.holeCards;
+      p.eyePatchIndex = ps.eyePatchIndex;
+      p.revealedHoleCardIndices = ps.revealedHoleCardIndices;
+      p.powerCards = ps.powerCards;
+    }
+    this._spellSnapshot = null;
   }
 
   _closeReactiveWindow() {

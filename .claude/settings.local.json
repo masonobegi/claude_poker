@@ -18,7 +18,8 @@
       "Bash(findstr \":3001\")",
       "Bash(node -e \"require\\('./server/src/game/GameRoom'\\); console.log\\('OK'\\)\")",
       "Bash(findstr \":3001.*LISTENING\")",
-      "Bash(taskkill /PID 12116 /F)"
+      "Bash(taskkill /PID 12116 /F)",
+      "Bash(xargs taskkill *)"
     ],
     "additionalDirectories": [
       "C:\\Users\\mason\\OneDrive\\Desktop\\poker_for_wizards_claude\\.git"

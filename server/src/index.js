@@ -119,9 +119,28 @@ io.on('connection', (socket) => {
       socket.emit('game:error', { message: 'Reactive window closed' });
       return;
     }
+
+    // Identify the card before playing (playPowerCard removes it from hand)
+    const player = room.players.find(p => p.id === socket.id);
+    const reactCard = player?.powerCards.find(c => c.instanceId === instanceId);
+    const isVeto = reactCard?.definitionId === 'veto';
+
     const result = room.playPowerCard(socket.id, instanceId, {});
-    if (result?.error) socket.emit('game:error', { message: result.error });
-    else room._closeReactiveWindow();
+    if (result?.error) { socket.emit('game:error', { message: result.error }); return; }
+
+    // Veto: restore game state to before the last spell's effect
+    if (isVeto) {
+      room._restoreSpellSnapshot();
+      room.addLog(`🚫 ${player?.name || 'Someone'} vetoed the spell! Effects reversed.`);
+      room.broadcast('game:powerCardPlayed', {
+        playerId: socket.id,
+        playerName: player?.name,
+        card: { name: 'Veto', icon: '❌', type: 'SPELL', description: 'Spell cancelled and effects undone.' },
+        result: 'Spell cancelled! Effects reversed.',
+      });
+    }
+
+    room._closeReactiveWindow();
   });
 
   socket.on('game:skipReactive', () => {
