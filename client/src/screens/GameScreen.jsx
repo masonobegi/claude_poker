@@ -14,13 +14,14 @@ import ModsIndicator from '../components/ui/ModsIndicator';
 import PhaseWindowBanner from '../components/ui/PhaseWindowBanner';
 import CurrentHandDisplay from '../components/ui/CurrentHandDisplay';
 import SpellBurst from '../components/ui/SpellBurst';
+import PowerCardToast from '../components/ui/PowerCardToast';
 import Notification from '../components/ui/Notification';
 import './GameScreen.css';
 
 export default function GameScreen({
   gameState, playerId, gameLog, notification,
-  winChoiceData, rankPrompt, coinPrompt, reactiveWindow,
-  spinnerData, spellBurst, onSpellBurstDone, needSell, onSpinnerClose, actions, audioEngine,
+  winChoiceData, rankPrompt, coinPrompt, reactiveWindow, reactiveQueue,
+  spinnerData, spellBurst, onSpellBurstDone, cardEvents, needSell, onSpinnerClose, actions, audioEngine,
 }) {
   const [selectedCard, setSelectedCard] = useState(null);
   const [logOpen, setLogOpen] = useState(false);
@@ -124,12 +125,16 @@ export default function GameScreen({
       {/* Spell burst particles */}
       <SpellBurst active={spellBurst} onDone={onSpellBurstDone} />
 
+      {/* Power card played toasts */}
+      <PowerCardToast events={cardEvents || []} />
+
       {/* Overlays */}
       {notification && <Notification {...notification} />}
 
       {reactiveWindow && (
         <ReactiveWindow
           data={reactiveWindow}
+          queue={reactiveQueue || []}
           myPowerCards={myPowerCards}
           onPlay={actions.reactivePlay}
         />

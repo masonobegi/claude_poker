@@ -20,9 +20,11 @@ export default function App() {
   const [rankPrompt, setRankPrompt] = useState(null);     // { drawnRanks, instanceId }
   const [coinPrompt, setCoinPrompt] = useState(null);     // { cardName, instanceId }
   const [reactiveWindow, setReactiveWindow] = useState(null);
+  const [reactiveQueue, setReactiveQueue] = useState([]); // queued spells waiting for veto
   const [spinnerData, setSpinnerData] = useState(null);
   const [needSell, setNeedSell] = useState(false);
   const [spellBurst, setSpellBurst] = useState(false);
+  const [cardEvents, setCardEvents] = useState([]); // for PowerCardToast
 
   const notify = useCallback((msg, type = 'info') => {
     setNotification({ msg, type });
@@ -62,13 +64,15 @@ export default function App() {
       if (action === 'fold') audioEngine.play('fold');
       else audioEngine.play('chip');
     });
-    socket.on('game:powerCardPlayed', ({ card, result: resultMsg, spinResult, coinResult, targetName }) => {
+    socket.on('game:powerCardPlayed', ({ playerId: pid, playerName, card, result: resultMsg, spinResult }) => {
       audioEngine.play('spell');
       setSpellBurst(true);
       if (spinResult) {
         setSpinnerData({ result: Array.isArray(spinResult) ? spinResult[0] : spinResult });
       }
-      if (resultMsg) notify(`${card?.icon || '✨'} ${card?.name || 'Power card'}: ${resultMsg}`, 'info');
+      // Add to toast queue (cap at 6)
+      const ev = { id: Date.now() + Math.random(), playerName, card, result: resultMsg };
+      setCardEvents(prev => [...prev.slice(-5), ev]);
     });
     socket.on('game:log', (entries) => {
       setGameLog(prev => [...prev.slice(-80), ...entries]);
@@ -81,6 +85,10 @@ export default function App() {
     });
     socket.on('game:reactiveWindowClosed', () => {
       setReactiveWindow(null);
+      setReactiveQueue([]);
+    });
+    socket.on('game:reactiveQueued', (data) => {
+      setReactiveQueue(prev => [...prev, data]);
     });
     socket.on('game:rankBagPrompt', ({ drawnRanks, instanceId: iid }) => {
       setRankPrompt({ drawnRanks, instanceId: iid });
@@ -168,9 +176,11 @@ export default function App() {
       rankPrompt={rankPrompt}
       coinPrompt={coinPrompt}
       reactiveWindow={reactiveWindow}
+      reactiveQueue={reactiveQueue}
       spinnerData={spinnerData}
       spellBurst={spellBurst}
       onSpellBurstDone={() => setSpellBurst(false)}
+      cardEvents={cardEvents}
       needSell={needSell}
       onSpinnerClose={() => setSpinnerData(null)}
       actions={actions}

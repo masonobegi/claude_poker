@@ -95,6 +95,7 @@ class GameRoom {
     this.phaseTimer = null;
     this.reactiveTimer = null; // separate from phaseTimer so spells don't kill phase transitions
     this.phaseDeadline = null; // timestamp when current phase auto-advances
+    this.reactiveQueue = []; // queue of spells waiting for a veto window
     this.winnerInfo = null;  // { winnerId, pot, runnerUpId }
     this.pendingPowerCard = null; // for input-requiring cards
     this.hostId = null;
@@ -211,6 +212,8 @@ class GameRoom {
     this.callInActive = false;
     this.vetoActive = false;
     this.lastPlayedSpell = null;
+    this.reactiveQueue = [];
+    this.reactiveWindow = null;
     this.winnerInfo = null;
     this.pendingPowerCard = null;
 
@@ -295,8 +298,24 @@ class GameRoom {
 
   // ── Phase Transitions ──────────────────────────────────────────────────────
 
+  // Schedule the phase advance; stores _phaseNextFn so the timer can be reset
+  _scheduleNext(fn, ms) {
+    this._phaseNextFn = fn;
+    this.phaseTimer = setTimeout(fn, ms);
+  }
+
+  // Reset the current phase timer to `ms` more seconds (allows multiple card plays per window)
+  _resetPhaseTimer(ms = 10000) {
+    if (!this._phaseNextFn) return;
+    clearTimeout(this.phaseTimer);
+    this.phaseDeadline = Date.now() + ms;
+    this.phaseTimer = setTimeout(this._phaseNextFn, ms);
+    this.broadcastState(); // push updated phaseDeadline to clients
+  }
+
   _setPhase(phase) {
     clearTimeout(this.phaseTimer);
+    this._phaseNextFn = null;
     this.phase = phase;
     const duration = PHASE_DURATION[phase];
     this.phaseDeadline = duration ? Date.now() + duration : null;
@@ -304,81 +323,76 @@ class GameRoom {
     this.broadcastState();
 
     if (phase === PHASES.BEFORE_DEAL) {
-      // Short window for BEFORE_DEAL power cards; bots auto-play
       this._botPlayPhaseCards();
-      this.phaseTimer = setTimeout(() => this._deal(), duration || 8000);
+      this._scheduleNext(() => this._deal(), duration || 12000);
     }
     else if (phase === PHASES.DEALING) {
-      this.phaseTimer = setTimeout(() => this._afterDeal(), duration || 1500);
+      this._scheduleNext(() => this._afterDeal(), duration || 1500);
     }
     else if (phase === PHASES.BEFORE_PREFLOP) {
       this._botPlayPhaseCards();
-      this.phaseTimer = setTimeout(() => this._startPreflop(), duration || 8000);
+      this._scheduleNext(() => this._startPreflop(), duration || 10000);
     }
     else if (phase === PHASES.PREFLOP_BETTING) {
       this._startBettingRound(true);
     }
     else if (phase === PHASES.BEFORE_FLOP) {
       this._botPlayPhaseCards();
-      this.phaseTimer = setTimeout(() => this._dealFlop(), duration || 2000);
+      this._scheduleNext(() => this._dealFlop(), duration || 2000);
     }
     else if (phase === PHASES.FLOP_DEAL) {
-      this.phaseTimer = setTimeout(() => this._setPhase(PHASES.AFTER_FLOP_BEFORE_ACTION), duration || 1500);
+      this._scheduleNext(() => this._setPhase(PHASES.AFTER_FLOP_BEFORE_ACTION), duration || 1500);
     }
     else if (phase === PHASES.AFTER_FLOP_BEFORE_ACTION) {
       this._botPlayPhaseCards();
-      this.phaseTimer = setTimeout(() => this._setPhase(PHASES.FLOP_BETTING), duration || 8000);
+      this._scheduleNext(() => this._setPhase(PHASES.FLOP_BETTING), duration || 12000);
     }
     else if (phase === PHASES.FLOP_BETTING) {
       this._startBettingRound(false);
     }
     else if (phase === PHASES.BEFORE_TURN) {
       this._botPlayPhaseCards();
-      this.phaseTimer = setTimeout(() => this._dealTurn(), duration || 2000);
+      this._scheduleNext(() => this._dealTurn(), duration || 2000);
     }
     else if (phase === PHASES.AFTER_TURN) {
-      // Window between turn reveal and turn betting — Return/Reriver can be played here
       this._botPlayPhaseCards();
-      this.phaseTimer = setTimeout(() => this._setPhase(PHASES.TURN_BETTING), duration || 10000);
+      this._scheduleNext(() => this._setPhase(PHASES.TURN_BETTING), duration || 10000);
     }
     else if (phase === PHASES.TURN_DEAL) {
-      this.phaseTimer = setTimeout(() => this._setPhase(PHASES.AFTER_TURN), duration || 1200);
+      this._scheduleNext(() => this._setPhase(PHASES.AFTER_TURN), duration || 1200);
     }
     else if (phase === PHASES.TURN_BETTING) {
       this._startBettingRound(false);
     }
     else if (phase === PHASES.BEFORE_RIVER) {
       this._botPlayPhaseCards();
-      this.phaseTimer = setTimeout(() => this._dealRiver(), duration || 2000);
+      this._scheduleNext(() => this._dealRiver(), duration || 2000);
     }
     else if (phase === PHASES.RIVER_DEAL) {
-      this.phaseTimer = setTimeout(() => this._setPhase(PHASES.AFTER_RIVER_BEFORE_ACTION), duration || 1200);
+      this._scheduleNext(() => this._setPhase(PHASES.AFTER_RIVER_BEFORE_ACTION), duration || 1200);
     }
     else if (phase === PHASES.AFTER_RIVER_BEFORE_ACTION) {
-      // Window between river reveal and river betting — Sixth Sense + Return/Reriver here
       this._botPlayPhaseCards();
-      this.phaseTimer = setTimeout(() => this._setPhase(PHASES.RIVER_BETTING), duration || 12000);
+      this._scheduleNext(() => this._setPhase(PHASES.RIVER_BETTING), duration || 12000);
     }
     else if (phase === PHASES.RIVER_BETTING) {
       this._startBettingRound(false);
     }
     else if (phase === PHASES.AFTER_RIVER) {
-      // Post-river window before showdown
       this._botPlayPhaseCards();
-      this.phaseTimer = setTimeout(() => this._doShowdown(), duration || 10000);
+      this._scheduleNext(() => this._doShowdown(), duration || 10000);
     }
     else if (phase === PHASES.SHOWDOWN) {
-      this.phaseTimer = setTimeout(() => this._doWinChoice(), duration || 4000);
+      this._scheduleNext(() => this._doWinChoice(), duration || 4000);
     }
     else if (phase === PHASES.WIN_CHOICE) {
-      // Bots resolve immediately
       this._botWinChoice();
-      this.phaseTimer = setTimeout(() => this._defaultWinChoice(), duration || 20000);
+      this._scheduleNext(() => this._defaultWinChoice(), duration || 20000);
     }
     else if (phase === PHASES.HAND_COMPLETE) {
       this._resolveBounties();
       this._botPlayPhaseCards();
-      this.phaseTimer = setTimeout(() => this._endHand(), duration || 3000);
+      this._scheduleNext(() => this._endHand(), duration || 3000);
     }
     else if (phase === PHASES.GAME_OVER) {
       this.broadcast('game:over', { standings: this._standings() });
@@ -899,7 +913,13 @@ class GameRoom {
     this.addLog(`${player.name} plays ${card.name}. ${result.message}`);
     this.broadcast('game:powerCardPlayed', {
       playerId,
-      card: { ...card, instanceId: undefined },
+      playerName: player.name,
+      card: {
+        name: card.name,
+        icon: card.icon,
+        type: card.type,
+        description: card.description,
+      },
       result: result.message,
       spinResult: result.spinResult,
       coinResult: result.coinResult,
@@ -910,16 +930,41 @@ class GameRoom {
       this.io.to(playerId).emit('game:privateData', result.privateData);
     }
 
+    // Reset window phase timer so more cards can be played (multiple per phase)
+    const WINDOW_PHASES = new Set([
+      'before_deal','before_preflop','after_flop_before_action',
+      'after_turn','after_river_before_action','after_river','hand_complete',
+    ]);
+    if (WINDOW_PHASES.has(this.phase) && !isReactive) {
+      this._resetPhaseTimer(10000);
+    }
+
     this.broadcastState();
     return { ok: true, result };
   }
 
   _openReactiveWindow(card, playerId) {
-    clearTimeout(this.reactiveTimer); // never overwrite phaseTimer
+    // If a window is already active, queue this spell; it'll get its own window after
+    if (this.reactiveWindow && !this.reactiveWindow.resolved) {
+      this.reactiveQueue.push({ card, playerId });
+      // Notify clients that another spell is queued
+      this.broadcast('game:reactiveQueued', {
+        card: { name: card.name, icon: card.icon, description: card.description },
+        playerName: this.players.find(p => p.id === playerId)?.name || '?',
+      });
+      return;
+    }
+
+    clearTimeout(this.reactiveTimer);
     const deadline = Date.now() + REACTIVE_WINDOW_MS;
     this.reactiveWindow = { card, playerId, resolved: false, deadline };
     this.broadcast('game:reactiveWindow', {
-      triggeringCard: { name: card.name, icon: card.icon },
+      triggeringCard: {
+        name: card.name,
+        icon: card.icon,
+        description: card.description,
+        type: card.type,
+      },
       deadline,
     });
 
@@ -936,6 +981,12 @@ class GameRoom {
     this.reactiveWindow = null;
     this.broadcast('game:reactiveWindowClosed', {});
     this.broadcastState();
+
+    // Open next queued window if any
+    if (this.reactiveQueue.length > 0) {
+      const next = this.reactiveQueue.shift();
+      setTimeout(() => this._openReactiveWindow(next.card, next.playerId), 400);
+    }
   }
 
   sellPowerCard(playerId, instanceId) {

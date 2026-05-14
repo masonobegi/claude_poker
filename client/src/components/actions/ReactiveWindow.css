@@ -14,35 +14,39 @@
 }
 
 .reactive-inner {
-  background: linear-gradient(135deg, #1a0840, #2a0060);
-  border: 1px solid rgba(200,100,255,0.5);
+  background: linear-gradient(160deg, #0e0525, #1a0840);
+  border: 1px solid color-mix(in srgb, var(--tc, #9966ff) 50%, transparent);
   border-top: none;
-  border-radius: 0 0 16px 16px;
-  padding: 0.75rem 1.25rem 1rem;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 30px rgba(160,60,255,0.2);
+  border-radius: 0 0 18px 18px;
+  padding: 0.85rem 1.25rem 1rem;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.7),
+              0 0 30px color-mix(in srgb, var(--tc, #9966ff) 20%, transparent);
 }
 
-.reactive-info {
+.reactive-active-spell {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.75rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
 }
 
-.reactive-spell-icon { font-size: 1.6rem; flex-shrink: 0; }
+.reactive-spell-icon { font-size: 1.8rem; flex-shrink: 0; line-height: 1.1; }
 
-.reactive-text { flex: 1; }
+.reactive-spell-info { flex: 1; min-width: 0; }
 
 .reactive-spell-name {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #cc88ff;
+  line-height: 1.2;
 }
 
-.reactive-hint {
+.reactive-verb { color: rgba(255,255,255,0.4); font-weight: 400; }
+
+.reactive-spell-desc {
   font-size: 0.72rem;
-  color: rgba(255,255,255,0.45);
-  margin-top: 1px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.4;
+  margin-top: 3px;
 }
 
 .reactive-countdown {
@@ -53,17 +57,15 @@
 }
 
 .reactive-seconds {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 900;
-  color: #cc88ff;
+  color: var(--tc, #cc88ff);
   font-variant-numeric: tabular-nums;
   line-height: 1;
+  text-shadow: 0 0 12px var(--tc, #cc88ff);
 }
 
-.reactive-s {
-  font-size: 0.9rem;
-  color: rgba(200,120,255,0.6);
-}
+.reactive-s { font-size: 0.85rem; color: rgba(255,255,255,0.35); }
 
 .reactive-bar-wrap {
   height: 3px;
@@ -75,21 +77,17 @@
 
 .reactive-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #6622dd, #cc88ff);
   transition: width 0.1s linear;
   border-radius: 2px;
 }
 
-.reactive-actions {
-  display: flex;
-  gap: 0.5rem;
-}
+.reactive-actions { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
 
 .reactive-btn {
   flex: 1;
   padding: 0.55rem 0.75rem;
   border-radius: 10px;
-  font-size: 0.85rem;
+  font-size: 0.83rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -97,25 +95,48 @@
 }
 
 .reactive-veto {
-  background: rgba(200,40,40,0.3);
-  border-color: rgba(255,80,80,0.6);
+  background: rgba(200,40,40,0.25);
+  border-color: rgba(255,80,80,0.55);
   color: #ff9090;
 }
-
 .reactive-veto:hover {
-  background: rgba(200,40,40,0.6);
+  background: rgba(200,40,40,0.55);
   box-shadow: 0 0 14px rgba(255,60,60,0.4);
-  color: #ffb0b0;
 }
 
 .reactive-copy {
-  background: rgba(40,120,200,0.3);
-  border-color: rgba(80,160,255,0.6);
+  background: rgba(40,120,200,0.25);
+  border-color: rgba(80,160,255,0.55);
   color: #90c8ff;
 }
-
 .reactive-copy:hover {
-  background: rgba(40,120,200,0.6);
+  background: rgba(40,120,200,0.55);
   box-shadow: 0 0 14px rgba(60,140,255,0.4);
-  color: #b0d8ff;
 }
+
+/* Queued spells */
+.reactive-queue {
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.reactive-queue-label {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
+.reactive-queue-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.reactive-queue-name { font-weight: 600; }

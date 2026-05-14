@@ -28,9 +28,11 @@ const PHASE_TIMING_MAP = {
 };
 
 function canPlayCard(card, phase, isReactiveWindow) {
-  if (isReactiveWindow) {
-    return card.timing.includes(TIMING.AFTER_SPELL);
+  // Veto / Copy Machine can always be played when a reactive window is open
+  if (isReactiveWindow && card.timing.includes(TIMING.AFTER_SPELL)) {
+    return true;
   }
+  // Normal phase-based check (not blocked by reactive window)
   const allowed = PHASE_TIMING_MAP[phase] || [];
   return card.timing.some(t => allowed.includes(t));
 }
