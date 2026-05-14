@@ -35,7 +35,7 @@ const PHASES = {
 
 // Phase window durations (ms) — windows where players can play power cards
 const PHASE_DURATION = {
-  before_deal:              10000,
+  before_deal:              12000, // extra headroom for spinner animations
   before_preflop:           10000,
   after_flop_before_action: 12000,
   after_turn:               10000, // window between turn reveal and turn betting

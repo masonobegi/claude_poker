@@ -61,9 +61,12 @@ export default function App() {
       if (action === 'fold') audioEngine.play('fold');
       else audioEngine.play('chip');
     });
-    socket.on('game:powerCardPlayed', ({ card, spinResult, coinResult }) => {
+    socket.on('game:powerCardPlayed', ({ card, result: resultMsg, spinResult, coinResult, targetName }) => {
       audioEngine.play('spell');
-      if (spinResult) setSpinnerData({ result: spinResult });
+      if (spinResult) {
+        setSpinnerData({ result: Array.isArray(spinResult) ? spinResult[0] : spinResult });
+      }
+      if (resultMsg) notify(`${card?.icon || '✨'} ${card?.name || 'Power card'}: ${resultMsg}`, 'info');
     });
     socket.on('game:log', (entries) => {
       setGameLog(prev => [...prev.slice(-80), ...entries]);

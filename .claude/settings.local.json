@@ -11,7 +11,8 @@
       "Bash(git commit -m ' *)",
       "Bash(git rm *)",
       "Bash(git reset *)",
-      "Bash(git update-ref *)"
+      "Bash(git update-ref *)",
+      "Bash(gh repo *)"
     ],
     "additionalDirectories": [
       "C:\\Users\\mason\\OneDrive\\Desktop\\poker_for_wizards_claude\\.git"

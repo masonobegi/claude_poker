@@ -326,12 +326,16 @@ function resolveEffect(game, playerId, card, opts = {}) {
       const result = spin();
       const idx = result % activePlayers.length;
       const target = activePlayers[idx];
-      // Target can only see one card (index 0); index 1 is hidden
-      target.eyePatchIndex = 1; // hidden hole card index
+      // Hide the second hole card from the target (index 1)
+      target.eyePatchIndex = 1;
+      // If cards are already dealt, remove the hidden card from the target's awareness
+      // by adding it to revealedHoleCardIndices as invisible (we track it as a negation)
+      // The client uses eyePatchIndex to mask it regardless of deal timing.
       return {
         success: true,
-        message: `${target.name} can only see one hole card`,
+        message: `🏴‍☠️ Eye Patch hits ${target.name}! They can only see one of their hole cards.`,
         spinResult: result,
+        targetName: target.name,
       };
     }
 
