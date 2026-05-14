@@ -71,9 +71,18 @@ export default function App() {
       if (spinResult) {
         setSpinnerData({ result: Array.isArray(spinResult) ? spinResult[0] : spinResult });
       }
-      // Add to toast queue (cap at 6)
-      const ev = { id: Date.now() + Math.random(), playerName, card, result: resultMsg };
-      setCardEvents(prev => [...prev.slice(-5), ev]);
+      // Queue for the big center announcement + small toast
+      const ev = {
+        id: Date.now() + Math.random(),
+        playerName: playerName || 'Unknown',
+        card: {
+          ...card,
+          // ensure definitionId is present for art lookup
+          definitionId: card?.definitionId || card?.name?.toLowerCase().replace(/[^a-z]/g, '_'),
+        },
+        result: resultMsg,
+      };
+      setCardEvents(prev => [...prev.slice(-8), ev]);
     });
     socket.on('game:log', (entries) => {
       setGameLog(prev => [...prev.slice(-80), ...entries]);

@@ -37,6 +37,7 @@ import PhaseWindowBanner from '../components/ui/PhaseWindowBanner';
 import CurrentHandDisplay from '../components/ui/CurrentHandDisplay';
 import SpellBurst from '../components/ui/SpellBurst';
 import PowerCardToast from '../components/ui/PowerCardToast';
+import CardPlayAnnouncement from '../components/ui/CardPlayAnnouncement';
 import Notification from '../components/ui/Notification';
 import './GameScreen.css';
 
@@ -163,7 +164,10 @@ export default function GameScreen({
       {/* Spell burst particles */}
       <SpellBurst active={spellBurst} onDone={onSpellBurstDone} />
 
-      {/* Power card played toasts */}
+      {/* Big center announcement when any power card is played */}
+      <CardPlayAnnouncement events={cardEvents || []} />
+
+      {/* Small log toasts (secondary) */}
       <PowerCardToast events={cardEvents || []} />
 
       {/* Overlays */}

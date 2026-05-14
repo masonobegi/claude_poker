@@ -958,6 +958,7 @@ class GameRoom {
       playerId,
       playerName: player.name,
       card: {
+        definitionId: card.definitionId,
         name: card.name,
         icon: card.icon,
         type: card.type,
