@@ -1,6 +1,7 @@
 import React from 'react';
 import PlayingCard from '../cards/PlayingCard';
 import CardBack from '../cards/CardBack';
+import AvatarImage from './AvatarImage';
 import './PlayerSeat.css';
 
 function fmt(n) {
@@ -52,15 +53,20 @@ export default function PlayerSeat({ player, isMe, isActive, isDealer, isShowdow
 
       {/* Player info */}
       <div className="player-info">
-        <div className="player-name">
-          {isBot ? '🤖 ' : '🧙 '}{name}
-          {powerCardCount > 0 && (
-            <span className="player-card-count" title={`${powerCardCount} power cards`}>
-              ✨{powerCardCount}
-            </span>
-          )}
+        <div className="player-info-row">
+          <AvatarImage name={name} isBot={isBot} size={28} className="player-avatar-tiny" />
+          <div className="player-name-chip">
+            <div className="player-name">
+              {name}
+              {powerCardCount > 0 && (
+                <span className="player-card-count" title={`${powerCardCount} power cards`}>
+                  {powerCardCount}
+                </span>
+              )}
+            </div>
+            <div className="player-chips">{fmt(chips)}</div>
+          </div>
         </div>
-        <div className="player-chips">{fmt(chips)}</div>
       </div>
 
       {/* Status overlay */}

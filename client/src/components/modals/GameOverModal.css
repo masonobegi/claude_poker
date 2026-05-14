@@ -19,10 +19,15 @@
   box-shadow: 0 0 60px rgba(255,200,60,0.1), 0 20px 60px rgba(0,0,0,0.8);
 }
 
-.gameover-icon {
-  font-size: 3.5rem;
+.gameover-winner-avatar {
+  margin: 0 auto 0.75rem;
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid rgba(255,200,60,0.5);
+  box-shadow: 0 0 24px rgba(255,200,60,0.25);
   animation: trophyPop 0.5s ease-out;
-  margin-bottom: 0.5rem;
 }
 
 @keyframes trophyPop {
@@ -68,9 +73,26 @@
   border: 1px solid rgba(120,60,220,0.3);
 }
 
-.gameover-rank { font-size: 1.1rem; width: 28px; }
-.gameover-name { flex: 1; font-size: 0.9rem; }
-.gameover-chips { color: var(--gold); font-weight: 700; font-size: 0.9rem; }
+.gameover-rank-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.4);
+  width: 32px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.gameover-rank-badge[data-rank="0"] { background: rgba(255,200,60,0.2); color: var(--gold); }
+.gameover-rank-badge[data-rank="1"] { background: rgba(200,220,255,0.15); color: #c0d8ff; }
+.gameover-rank-badge[data-rank="2"] { background: rgba(200,140,80,0.2); color: #e0a060; }
+
+.gameover-name { flex: 1; font-size: 0.88rem; }
+.gameover-you { color: rgba(255,255,255,0.4); font-size: 0.78rem; }
+.gameover-chips { color: var(--gold); font-weight: 700; font-size: 0.88rem; }
 
 .gameover-reload {
   width: 100%;

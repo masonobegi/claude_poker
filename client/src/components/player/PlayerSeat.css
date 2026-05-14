@@ -81,20 +81,41 @@
   box-shadow: 0 0 16px rgba(255,200,60,0.3);
 }
 
+.player-info-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.player-avatar-tiny {
+  flex-shrink: 0;
+}
+
+.player-name-chip {
+  min-width: 0;
+}
+
 .player-name {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 96px;
+  max-width: 80px;
   color: #ddd;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .player-card-count {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: var(--gold);
-  margin-left: 2px;
+  background: rgba(255,200,60,0.15);
+  border: 1px solid rgba(255,200,60,0.3);
+  border-radius: 4px;
+  padding: 0 4px;
+  font-weight: 700;
 }
 
 .player-chips {

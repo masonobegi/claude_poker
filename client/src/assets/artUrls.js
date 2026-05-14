@@ -22,11 +22,49 @@ export const CARD_BACK_ART = art(
   220, 300, 105
 );
 
-// ── Game background ───────────────────────────────────────────────────────────
+// ── Atmospheric backgrounds ───────────────────────────────────────────────────
 export const GAME_BG_ART = art(
   'luxury casino interior at night, wizard themed, dark velvet walls adorned with glowing magical runes, atmospheric purple and gold candlelight, arcane bookshelves, mystical atmosphere, cinematic wide shot',
   1920, 1080, 106
 );
+
+// Different style suffix for background/character art — no card game style
+function envArt(prompt, w, h, seed) {
+  return `${BASE}/${encodeURIComponent(prompt)}?width=${w}&height=${h}&model=flux&nologo=true&seed=${seed}`;
+}
+
+export const HOME_BG_ART = envArt(
+  'grand magical casino interior, vaulted gothic stone ceiling, glowing purple crystal chandeliers, ornate poker tables with arcane runes, rich purple velvet drapes, golden candlelight, ancient tomes floating in air, swirling magical mist on floor, ultra wide cinematic shot, photorealistic fantasy environment, 8k, masterpiece',
+  1920, 1080, 501
+);
+
+export const HOME_HERO_ART = envArt(
+  'dramatic full body portrait of a powerful dark wizard standing at a luxury magical poker table, holding glowing enchanted playing cards with golden arcane runes, wearing elegant dark robes with purple and gold trim, long fingers with magical rings, confident commanding pose, dramatic rim lighting, ultra detailed fantasy oil painting, dark atmospheric background, masterpiece, 8k',
+  640, 900, 502
+);
+
+export const LOBBY_BG_ART = envArt(
+  'intimate luxury magical waiting lounge, deep leather armchairs by roaring enchanted fireplace with purple flames, floating candelabras, arcane tapestries on ancient stone walls, warm golden and violet atmospheric glow, cozy mysterious fantasy interior, ultra detailed environment art, masterpiece',
+  1920, 1080, 503
+);
+
+// ── Player portraits ──────────────────────────────────────────────────────────
+function portrait(prompt, seed) {
+  return envArt(`close-up portrait, ${prompt}, dramatic lighting, ultra detailed realistic digital painting, dark background, sharp focus, professional fantasy character art, 8k`, 256, 256, seed);
+}
+
+export const AVATAR_ART = {
+  Merlin:     portrait('ancient wizard Merlin, long flowing white beard, tall pointed star-covered hat, wise twinkling blue eyes, ornate midnight blue and gold robes, warm candlelight from below', 601),
+  Gandalf:    portrait('grey wizard with wide brimmed weathered hat, deeply carved wrinkled face, bushy grey eyebrows, wise stern grey eyes, grey travel-worn robes, subtle magical aura, pipe smoke', 602),
+  Dumbledore: portrait('elderly benevolent headmaster wizard, half-moon gold spectacles, long silver beard, kind powerful eyes, dark midnight blue starry robes, warm soft light', 603),
+  Morgana:    portrait('dark sorceress, fierce violet eyes, long silver-white hair, black silk robes with dark magic runes, shadow energy crackling around hands, beautiful and dangerous expression', 604),
+  Saruman:    portrait('commanding white wizard, long immaculate white beard, piercing cold intelligent eyes, white and gold ornate robes, imperious arrogant expression, magical staff', 605),
+  Circe:      portrait('enchantress witch, cascading auburn red hair, golden circlet headband, mysterious knowing smile, flowing white robes with gold accents, ancient magical wand', 606),
+  Hex:        portrait('young rebel street wizard, wild black hair with glowing blue tips, glowing arcane tattoos on face, intense eyes, dark leather jacket with runic patches, urban dark fantasy', 607),
+  Vex:        portrait('mysterious hooded shadowy wizard, only glowing violet eyes visible under deep dark hood, cloak covered in constellation patterns, supernatural ominous presence', 608),
+  human:      portrait('mysterious cloaked figure, face half in shadow, only piercing eyes visible, elegant dark hood, unknown dangerous energy, playing card motifs on cloak', 609),
+  bot:        portrait('arcane clockwork automaton wizard, brass and copper mechanical face with glowing blue crystal eyes, intricate magical gears and runes etched in chassis, steampunk sorcery hybrid', 610),
+};
 
 // ── Power card art — one unique image per card ────────────────────────────────
 export const POWER_ART = {
