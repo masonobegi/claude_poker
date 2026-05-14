@@ -63,7 +63,7 @@ const POWER_CARD_WINDOW_PHASES = new Set([
 const STARTING_CHIPS = 50000;
 const STARTING_BIG_BLIND = 1000;
 const MAX_POWER_CARDS = 4;
-const REACTIVE_WINDOW_MS = 5000;
+const REACTIVE_WINDOW_MS = 10000;
 const BOT_ACTION_DELAY_MS = 1200;
 
 class GameRoom {
@@ -93,6 +93,7 @@ class GameRoom {
     this.vetoActive = false;
     this.log = [];
     this.phaseTimer = null;
+    this.reactiveTimer = null; // separate from phaseTimer so spells don't kill phase transitions
     this.phaseDeadline = null; // timestamp when current phase auto-advances
     this.winnerInfo = null;  // { winnerId, pot, runnerUpId }
     this.pendingPowerCard = null; // for input-requiring cards
@@ -422,8 +423,7 @@ class GameRoom {
     }
 
     this.addLog('Cards dealt.');
-    // Short pause, then pre-flop window
-    setTimeout(() => this._setPhase(PHASES.BEFORE_PREFLOP), 1500);
+    // DEALING phase timer (set in _setPhase) already calls _afterDeal → BEFORE_PREFLOP
   }
 
   _afterDeal() {
@@ -614,7 +614,10 @@ class GameRoom {
     let next = (this.activePlayerIndex + 1) % this.players.length;
     let attempts = 0;
     while (
-      (this.players[next].hasFolded || this.players[next].isAllIn || !this.players[next].isActive || this.players[next].hasActedThisStreet && this.players[next].currentBet >= this.currentBet)
+      (this.players[next].hasFolded ||
+       this.players[next].isAllIn ||
+       !this.players[next].isActive ||
+       (this.players[next].hasActedThisStreet && this.players[next].currentBet >= this.currentBet))
       && attempts < this.players.length
     ) {
       next = (next + 1) % this.players.length;
@@ -834,9 +837,19 @@ class GameRoom {
     if (cardIdx === -1) return { error: 'Card not in hand' };
     const card = player.powerCards[cardIdx];
 
-    const isReactive = this.reactiveWindow && !this.reactiveWindow.resolved;
+    const isReactive = !!(this.reactiveWindow && !this.reactiveWindow.resolved);
     if (!canPlayCard(card, this.phase, isReactive)) {
       return { error: 'Cannot play this card right now' };
+    }
+
+    // ANYTIME cards during betting phases may only be played on your own turn
+    const BETTING_PHASES = ['preflop_betting','flop_betting','turn_betting','river_betting'];
+    const isAnyTime = card.timing.some(t => t === 'ANYTIME' || t === 'ANYTIME_AFTER_FLOP');
+    if (BETTING_PHASES.includes(this.phase) && isAnyTime && !isReactive) {
+      const activePlayer = this.players[this.activePlayerIndex];
+      if (!activePlayer || activePlayer.id !== playerId) {
+        return { error: 'You can only play ANYTIME cards on your own turn' };
+      }
     }
 
     // Handle rank-choice cards: if drawnRanks not provided yet, draw them first
@@ -902,6 +915,7 @@ class GameRoom {
   }
 
   _openReactiveWindow(card, playerId) {
+    clearTimeout(this.reactiveTimer); // never overwrite phaseTimer
     const deadline = Date.now() + REACTIVE_WINDOW_MS;
     this.reactiveWindow = { card, playerId, resolved: false, deadline };
     this.broadcast('game:reactiveWindow', {
@@ -909,7 +923,7 @@ class GameRoom {
       deadline,
     });
 
-    this.phaseTimer = setTimeout(() => {
+    this.reactiveTimer = setTimeout(() => {
       if (this.reactiveWindow && !this.reactiveWindow.resolved) {
         this._closeReactiveWindow();
       }
@@ -917,7 +931,9 @@ class GameRoom {
   }
 
   _closeReactiveWindow() {
+    clearTimeout(this.reactiveTimer);
     if (this.reactiveWindow) this.reactiveWindow.resolved = true;
+    this.reactiveWindow = null;
     this.broadcast('game:reactiveWindowClosed', {});
     this.broadcastState();
   }

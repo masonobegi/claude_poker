@@ -123,12 +123,11 @@ export default function GameScreen({
       {/* Overlays */}
       {notification && <Notification {...notification} />}
 
-      {reactiveWindow && myPowerCards.some(c => ['veto','copy_machine'].includes(c.definitionId)) && (
+      {reactiveWindow && (
         <ReactiveWindow
           data={reactiveWindow}
           myPowerCards={myPowerCards}
           onPlay={actions.reactivePlay}
-          onSkip={() => {}}
         />
       )}
 

@@ -1,50 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import './ReactiveWindow.css';
 
-export default function ReactiveWindow({ data, myPowerCards, onPlay, onSkip }) {
-  const [timeLeft, setTimeLeft] = useState(5);
-  const reactiveCards = myPowerCards.filter(c => ['veto','copy_machine'].includes(c.definitionId));
+export default function ReactiveWindow({ data, myPowerCards, onPlay }) {
+  const [timeLeft, setTimeLeft] = useState(10);
 
   useEffect(() => {
-    const deadline = data.deadline;
     const tick = setInterval(() => {
-      const remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+      const remaining = Math.max(0, (data.deadline - Date.now()) / 1000);
       setTimeLeft(remaining);
-      if (remaining <= 0) clearInterval(tick);
-    }, 200);
+    }, 100);
     return () => clearInterval(tick);
   }, [data.deadline]);
 
-  if (reactiveCards.length === 0) return null;
+  const vetoCard = myPowerCards.find(c => c.definitionId === 'veto');
+  const copyCard = myPowerCards.find(c => c.definitionId === 'copy_machine');
+  const pct = Math.max(0, (data.deadline - Date.now()) / 10000) * 100;
 
   return (
     <div className="reactive-banner">
-      <div className="reactive-content">
-        <div className="reactive-title">
-          ⚡ Reactive Window <span className="reactive-timer">{timeLeft}s</span>
+      <div className="reactive-inner">
+        <div className="reactive-info">
+          <span className="reactive-spell-icon">{data.triggeringCard?.icon || '✨'}</span>
+          <div className="reactive-text">
+            <div className="reactive-spell-name">{data.triggeringCard?.name || 'Spell'} played</div>
+            <div className="reactive-hint">
+              {vetoCard || copyCard ? 'You have a reaction available' : 'Waiting for reactions…'}
+            </div>
+          </div>
+          <div className="reactive-countdown">
+            <span className="reactive-seconds">{Math.ceil(timeLeft)}</span>
+            <span className="reactive-s">s</span>
+          </div>
         </div>
-        <div className="reactive-desc">
-          <span className="reactive-card-name">{data.triggeringCard?.name || 'Spell'}</span> was played!
-          You can Veto or Copy it.
+
+        <div className="reactive-bar-wrap">
+          <div className="reactive-bar-fill" style={{ width: `${pct}%` }} />
         </div>
-        <div className="reactive-timer-bar">
-          <div
-            className="reactive-timer-fill"
-            style={{ width: `${(timeLeft / 5) * 100}%` }}
-          />
-        </div>
-        <div className="reactive-actions">
-          {reactiveCards.map(card => (
-            <button
-              key={card.instanceId}
-              className="reactive-btn"
-              onClick={() => onPlay(card.instanceId)}
-            >
-              {card.icon} {card.name}
-            </button>
-          ))}
-          <button className="reactive-skip" onClick={onSkip}>Pass</button>
-        </div>
+
+        {(vetoCard || copyCard) && (
+          <div className="reactive-actions">
+            {vetoCard && (
+              <button className="reactive-btn reactive-veto" onClick={() => onPlay(vetoCard.instanceId)}>
+                ❌ Veto — Cancel this spell
+              </button>
+            )}
+            {copyCard && (
+              <button className="reactive-btn reactive-copy" onClick={() => onPlay(copyCard.instanceId)}>
+                📠 Copy Machine — Copy this spell
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
