@@ -203,6 +203,7 @@ function resolveEffect(game, playerId, card, opts = {}) {
         const paid = Math.min(owes, p.chips);
         p.chips -= paid;
         p.currentBet += paid;
+        p.totalBetThisHand += paid;  // required for side pot calculation
         game.pot += paid;
       }
       game.callInActive = true; // signal to HandEngine to skip preflop betting

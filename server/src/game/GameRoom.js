@@ -694,10 +694,11 @@ class GameRoom {
     this.addLog(`${winner.name} wins the pot of ${this.pot} (everyone else folded)`);
     this.winnerInfo = {
       winnerId: winner.id,
-      pot: this.pot,
+      pot: this.pot,   // winnerInfo.pot = full pot (will be zeroed in resolveWinChoice)
       runnerUpId: null,
       handResults: [],
     };
+    // Don't zero pot here — resolveWinChoice does it after winner chooses
     this._setPhase(PHASES.WIN_CHOICE);
   }
 
@@ -715,12 +716,15 @@ class GameRoom {
       r.player.bestHand = r.bestHand;
     }
 
-    // Apply payouts (minus win-choice mechanic for main pot winner)
+    // Distribute side-pot / non-main-winner payouts; reduce this.pot accordingly
+    let distributed = 0;
     for (const [pid, amount] of Object.entries(payouts)) {
-      if (pid === mainWinnerId) continue; // handled via win choice
+      if (pid === mainWinnerId) continue; // main winner handled via win choice
       const p = this.players.find(pl => pl.id === pid);
-      if (p) p.chips += amount;
+      if (p) { p.chips += amount; distributed += amount; }
     }
+    // Pot now only holds what the main winner is owed
+    this.pot -= distributed;
 
     const mainWinnerPayout = payouts[mainWinnerId] || 0;
     this.winnerInfo = {
@@ -776,6 +780,7 @@ class GameRoom {
 
     if (choice === 'full') {
       winner.chips += this.winnerInfo.pot;
+      this.pot = 0; // pot fully distributed
       this._drawPowerCardForPlayer(winner);
       this.addLog(`${winner.name} takes the full pot (${this.winnerInfo.pot}) and draws a power card`);
     } else {
@@ -783,6 +788,7 @@ class GameRoom {
       const half = Math.floor(this.winnerInfo.pot / 2);
       winner.chips += half;
       this.rolloverPot += this.winnerInfo.pot - half;
+      this.pot = 0; // pot fully accounted for (half to winner, half to rollover)
 
       if (stealTargetCardInstanceId) {
         for (const p of this.players) {
@@ -855,7 +861,7 @@ class GameRoom {
       if (!p.bestHand) continue; // no showdown — bounties don't apply to fold wins
       const bounties = p.powerCards.filter(c => c.type === CARD_TYPE.BOUNTY);
       for (const bounty of bounties) {
-        const result = resolveEffect(this._gameState(), p.id, bounty, {});
+        const result = resolveEffect(this, p.id, bounty, {});
         if (result.success) {
           this.addLog(`${p.name} bounty: ${result.message}`);
           p.powerCards = p.powerCards.filter(c => c.instanceId !== bounty.instanceId);
@@ -939,8 +945,9 @@ class GameRoom {
     // Snapshot game state BEFORE applying the effect so Veto can fully undo it
     if (isSpell) this._takeSpellSnapshot();
 
-    // Apply effect
-    const result = resolveEffect(this._gameState(), playerId, card, opts);
+    // Apply effect — pass 'this' (live GameRoom) so mutations to pot,
+    // callInActive, etc. write through correctly (not to a stale copy)
+    const result = resolveEffect(this, playerId, card, opts);
     if (!result.success) return { error: result.message };
 
     // Remove card from hand
@@ -1043,6 +1050,8 @@ class GameRoom {
 
   _takeSpellSnapshot() {
     this._spellSnapshot = {
+      pot: this.pot,                    // must restore or Call In veto double-counts chips
+      rolloverPot: this.rolloverPot,
       communityCards: this.communityCards.map(c => ({ ...c })),
       mods: { ...this.mods },
       wildRanks: [...this.wildRanks],
@@ -1050,12 +1059,12 @@ class GameRoom {
       players: this.players.map(p => ({
         id: p.id,
         chips: p.chips,
+        currentBet: p.currentBet,          // restore so bet tracking stays consistent
+        totalBetThisHand: p.totalBetThisHand,
         holeCards: p.holeCards.map(c => ({ ...c })),
         eyePatchIndex: p.eyePatchIndex,
         revealedHoleCardIndices: [...(p.revealedHoleCardIndices || [])],
-        // NOTE: powerCards intentionally NOT snapshotted — played cards
-        // are spent regardless of Veto. Veto only undoes the game EFFECT,
-        // not the card expenditure itself.
+        // powerCards NOT snapshotted — played cards are spent regardless of Veto
       })),
     };
   }
@@ -1063,6 +1072,8 @@ class GameRoom {
   _restoreSpellSnapshot() {
     const snap = this._spellSnapshot;
     if (!snap) return;
+    this.pot = snap.pot;
+    this.rolloverPot = snap.rolloverPot;
     this.communityCards = snap.communityCards;
     this.mods = snap.mods;
     this.wildRanks = snap.wildRanks;
@@ -1071,10 +1082,11 @@ class GameRoom {
       const p = this.players.find(pl => pl.id === ps.id);
       if (!p) continue;
       p.chips = ps.chips;
+      p.currentBet = ps.currentBet;
+      p.totalBetThisHand = ps.totalBetThisHand;
       p.holeCards = ps.holeCards;
       p.eyePatchIndex = ps.eyePatchIndex;
       p.revealedHoleCardIndices = ps.revealedHoleCardIndices;
-      // Power cards NOT restored — both spell and veto cards remain spent
     }
     this._spellSnapshot = null;
   }

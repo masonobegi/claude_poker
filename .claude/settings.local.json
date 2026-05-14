@@ -22,7 +22,8 @@
       "Bash(xargs taskkill *)",
       "Bash(node sim-test.js)",
       "Bash(taskkill /PID 20744 /F)",
-      "Bash(xargs -I{} taskkill /PID {} /F)"
+      "Bash(xargs -I{} taskkill /PID {} /F)",
+      "Bash(node sim-stress.js)"
     ],
     "additionalDirectories": [
       "C:\\Users\\mason\\OneDrive\\Desktop\\poker_for_wizards_claude\\.git"

@@ -108,7 +108,13 @@ class Bot {
         };
       }
       case 'player_select': {
-        const others = game.players.filter(p => p.id !== this.player.id && p.isActive && !p.eliminated);
+        let others = game.players.filter(p => p.id !== this.player.id && p.isActive && !p.eliminated);
+        // Yes You steals spell cards — only target players who actually have them
+        if (card.definitionId === 'yes_you') {
+          const withSpells = others.filter(p => p.powerCards.some(c => c.type === 'SPELL'));
+          if (withSpells.length > 0) others = withSpells;
+          else return {}; // no valid targets, skip playing this card
+        }
         if (others.length === 0) return {};
         return { targetPlayerId: others[Math.floor(Math.random() * others.length)].id };
       }
