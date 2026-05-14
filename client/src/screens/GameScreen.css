@@ -8,18 +8,35 @@
   position: relative;
 }
 
-/* AI background art fades in when loaded */
+/* Rich gradient background — visible immediately, no loading required */
 .game-screen::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: var(--game-bg-url);
-  background-size: cover;
-  background-position: center;
-  opacity: 0.18;
+  background:
+    radial-gradient(ellipse at 25% 20%, rgba(80,20,180,0.45) 0%, transparent 50%),
+    radial-gradient(ellipse at 75% 80%, rgba(40,10,120,0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(20,5,60,0.3) 0%, transparent 70%),
+    linear-gradient(160deg, #0c0420 0%, #060114 50%, #0a0220 100%);
   z-index: 0;
   pointer-events: none;
-  transition: opacity 1s ease;
+}
+
+/* AI background art div — fades in after image loads */
+.game-bg-art {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.28;
+  z-index: 0;
+  pointer-events: none;
+  animation: bgFadeIn 1.5s ease-out;
+}
+
+@keyframes bgFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 0.28; }
 }
 
 .game-table-area, .game-hud { position: relative; z-index: 1; }

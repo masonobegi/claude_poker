@@ -1052,7 +1052,9 @@ class GameRoom {
         holeCards: p.holeCards.map(c => ({ ...c })),
         eyePatchIndex: p.eyePatchIndex,
         revealedHoleCardIndices: [...(p.revealedHoleCardIndices || [])],
-        powerCards: [...p.powerCards],
+        // NOTE: powerCards intentionally NOT snapshotted — played cards
+        // are spent regardless of Veto. Veto only undoes the game EFFECT,
+        // not the card expenditure itself.
       })),
     };
   }
@@ -1071,7 +1073,7 @@ class GameRoom {
       p.holeCards = ps.holeCards;
       p.eyePatchIndex = ps.eyePatchIndex;
       p.revealedHoleCardIndices = ps.revealedHoleCardIndices;
-      p.powerCards = ps.powerCards;
+      // Power cards NOT restored — both spell and veto cards remain spent
     }
     this._spellSnapshot = null;
   }

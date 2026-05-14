@@ -49,13 +49,11 @@ export default function GameScreen({
   const [selectedCard, setSelectedCard] = useState(null);
   const [logOpen, setLogOpen] = useState(false);
 
+  const [bgLoaded, setBgLoaded] = useState(false);
   useEffect(() => {
-    // Preload background art
     const img = new Image();
     img.src = GAME_BG_ART;
-    img.onload = () => {
-      document.documentElement.style.setProperty('--game-bg-url', `url(${GAME_BG_ART})`);
-    };
+    img.onload = () => setBgLoaded(true);
   }, []);
 
   if (!gameState) {
@@ -87,6 +85,13 @@ export default function GameScreen({
 
   return (
     <div className="game-screen">
+      {/* AI background art */}
+      {bgLoaded && (
+        <div
+          className="game-bg-art"
+          style={{ backgroundImage: `url(${GAME_BG_ART})` }}
+        />
+      )}
       {/* Table */}
       <div className="game-table-area">
         <PokerTable

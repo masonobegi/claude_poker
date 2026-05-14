@@ -20,7 +20,9 @@
       "Bash(findstr \":3001.*LISTENING\")",
       "Bash(taskkill /PID 12116 /F)",
       "Bash(xargs taskkill *)",
-      "Bash(node sim-test.js)"
+      "Bash(node sim-test.js)",
+      "Bash(taskkill /PID 20744 /F)",
+      "Bash(xargs -I{} taskkill /PID {} /F)"
     ],
     "additionalDirectories": [
       "C:\\Users\\mason\\OneDrive\\Desktop\\poker_for_wizards_claude\\.git"

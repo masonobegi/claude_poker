@@ -3,9 +3,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  width: 84px;
-  padding: 0 0 6px 0;
+  width: 104px;
+  padding: 0 0 7px 0;
   overflow: hidden;
   background: linear-gradient(160deg, rgba(30,10,60,0.97), rgba(15,5,35,0.99));
   border: 1.5px solid var(--type-color, #888);
@@ -46,15 +45,14 @@
   50%       { box-shadow: 0 0 22px rgba(255,60,60,0.9); }
 }
 
-/* AI art fills the top portion of the tile */
+/* AI art fills the top of the tile */
 .power-tile-art-wrap {
   width: 100%;
-  height: 56px;
-  border-radius: 8px 8px 0 0;
+  height: 70px;
   overflow: hidden;
-  flex-shrink: 0;
-  background: rgba(0,0,0,0.3);
   position: relative;
+  background: rgba(0,0,0,0.4);
+  border-radius: 10px 10px 0 0;
 }
 
 .power-tile-art {
@@ -62,27 +60,52 @@
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.5s ease;
 }
 
 .power-tile-art.loaded { opacity: 1; }
 
+/* Gradient ensures name is always readable over any art color */
+.power-tile-art-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(transparent, rgba(10,3,28,0.85));
+  pointer-events: none;
+}
+
+/* Dim overlay when not playable */
 .power-tile-locked-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0,0,0,0.5);
   border-radius: inherit;
   pointer-events: none;
 }
 
+/* Card name always white with a text shadow so it reads over anything */
 .power-tile-name {
-  font-size: 0.6rem;
+  font-size: 0.66rem;
   text-align: center;
-  color: var(--type-color, #aaa);
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.8);
   line-height: 1.25;
   font-weight: 700;
   word-break: break-word;
   max-width: 100%;
+  padding: 0 4px;
+  margin-top: 4px;
+}
+
+/* Tint the name with the type color as a glow rather than the fill */
+.power-tile.playable .power-tile-name {
+  color: #fff;
+  text-shadow:
+    0 1px 4px rgba(0,0,0,0.9),
+    0 0 10px color-mix(in srgb, var(--type-color) 60%, transparent);
 }
 
 .power-tile-sell-badge {
@@ -97,18 +120,10 @@
   padding: 2px 6px;
   border-radius: 5px;
   white-space: nowrap;
+  z-index: 10;
 }
 
-.power-tile-locked {
-  position: absolute;
-  bottom: 4px;
-  right: 4px;
-  font-size: 0.65rem;
-  opacity: 0.5;
-}
-
-/* ── Hover Tooltip ─────────────────────────────────────────── */
-
+/* ── Hover Tooltip ────────────────────────────────────────────── */
 .power-tile-tooltip {
   position: absolute;
   bottom: calc(100% + 10px);
@@ -132,7 +147,6 @@
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-/* Arrow pointing down */
 .power-tile-tooltip::after {
   content: '';
   position: absolute;
@@ -167,7 +181,7 @@
 
 .ptt-desc {
   font-size: 0.78rem;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255,255,255,0.8);
   line-height: 1.5;
   margin-bottom: 0.6rem;
   border-left: 2px solid var(--type-color, #888);
