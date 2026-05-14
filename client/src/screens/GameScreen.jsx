@@ -13,13 +13,14 @@ import PhaseIndicator from '../components/ui/PhaseIndicator';
 import ModsIndicator from '../components/ui/ModsIndicator';
 import PhaseWindowBanner from '../components/ui/PhaseWindowBanner';
 import CurrentHandDisplay from '../components/ui/CurrentHandDisplay';
+import SpellBurst from '../components/ui/SpellBurst';
 import Notification from '../components/ui/Notification';
 import './GameScreen.css';
 
 export default function GameScreen({
   gameState, playerId, gameLog, notification,
   winChoiceData, rankPrompt, coinPrompt, reactiveWindow,
-  spinnerData, needSell, onSpinnerClose, actions, audioEngine,
+  spinnerData, spellBurst, onSpellBurstDone, needSell, onSpinnerClose, actions, audioEngine,
 }) {
   const [selectedCard, setSelectedCard] = useState(null);
   const [logOpen, setLogOpen] = useState(false);
@@ -119,6 +120,9 @@ export default function GameScreen({
 
       {/* Game Log drawer */}
       <GameLog entries={gameLog} open={logOpen} onClose={() => setLogOpen(false)} />
+
+      {/* Spell burst particles */}
+      <SpellBurst active={spellBurst} onDone={onSpellBurstDone} />
 
       {/* Overlays */}
       {notification && <Notification {...notification} />}

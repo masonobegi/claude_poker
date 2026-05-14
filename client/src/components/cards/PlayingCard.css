@@ -1,84 +1,131 @@
 .playing-card {
   position: relative;
-  border-radius: 8px;
-  background: linear-gradient(145deg, #f8f4ff, #ede8fa);
-  border: 1px solid rgba(255,255,255,0.6);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3);
+  border-radius: 9px;
+  border: 1px solid rgba(220,210,255,0.7);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 3px 4px;
+  padding: 4px 5px;
   user-select: none;
   transition: transform 0.15s, box-shadow 0.15s;
   overflow: hidden;
+  animation: cardDeal 0.35s cubic-bezier(0.2, 0.8, 0.3, 1) both;
 }
 
-.playing-card.normal  { width: 64px; height: 92px; font-size: 0.75rem; }
-.playing-card.community { width: 76px; height: 110px; font-size: 0.85rem; }
-.playing-card.large   { width: 88px; height: 128px; font-size: 0.95rem; }
-.playing-card.small   { width: 52px; height: 76px; font-size: 0.65rem; }
+/* Sheen gradient overlay */
+.playing-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.06) 40%,
+    transparent 60%
+  );
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 5;
+}
 
+@keyframes cardDeal {
+  from { opacity: 0; transform: scale(0.75) rotateY(40deg); }
+  to   { opacity: 1; transform: scale(1) rotateY(0); }
+}
+
+/* Sizes */
+.playing-card.normal    { width: 64px;  height: 92px;  font-size: 0.75rem; }
+.playing-card.community { width: 76px;  height: 110px; font-size: 0.85rem; }
+.playing-card.large     { width: 88px;  height: 128px; font-size: 0.95rem; }
+.playing-card.small     { width: 52px;  height: 76px;  font-size: 0.65rem; }
+
+/* Red suits */
+.playing-card.red {
+  background: linear-gradient(145deg, #fffaf5, #f5ede0);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+/* Black suits */
+.playing-card.black {
+  background: linear-gradient(145deg, #f8f5ff, #ece8fa);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+/* Card back */
 .playing-card.back {
-  background: linear-gradient(135deg, #2d0a5e, #1a0040);
-  border-color: rgba(180,120,255,0.4);
-  cursor: default;
+  background: linear-gradient(135deg, #1e0650, #0e022e);
+  border-color: rgba(180,120,255,0.5);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.5), 0 0 8px rgba(120,60,200,0.2);
 }
 
 .card-back-pattern {
   position: absolute;
-  inset: 0;
+  inset: 4px;
+  border-radius: 6px;
+  border: 1px solid rgba(180,120,255,0.2);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 5px,
+      rgba(120,60,200,0.08) 5px,
+      rgba(120,60,200,0.08) 10px
+    ),
+    radial-gradient(ellipse at 50% 50%, rgba(140,60,220,0.15) 0%, transparent 70%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: rgba(180,120,255,0.3);
-  background-image: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 6px,
-    rgba(120,60,200,0.08) 6px,
-    rgba(120,60,200,0.08) 12px
-  );
+}
+
+/* Wild card */
+.playing-card.wild {
+  background: linear-gradient(145deg, #fffbe6, #fff0b0);
+  border-color: rgba(255,200,60,0.9);
+  box-shadow: 0 0 16px rgba(255,200,60,0.5), 0 3px 10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.9);
+  animation: cardDeal 0.35s cubic-bezier(0.2,0.8,0.3,1) both, wildShimmer 2s ease-in-out infinite;
+}
+
+@keyframes wildShimmer {
+  0%, 100% { box-shadow: 0 0 16px rgba(255,200,60,0.5), 0 3px 10px rgba(0,0,0,0.4); }
+  50%       { box-shadow: 0 0 28px rgba(255,200,60,0.8), 0 3px 10px rgba(0,0,0,0.4); }
+}
+
+/* Glowing (showdown winner) */
+.playing-card.glowing {
+  box-shadow: 0 0 20px rgba(255,200,60,0.7), 0 3px 10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.9);
+  animation: cardDeal 0.35s both, goldPulse 1.5s ease-in-out infinite;
 }
 
 .playing-card.empty {
   background: transparent;
   border: none;
   box-shadow: none;
+  animation: none;
 }
 
-.playing-card.wild {
-  background: linear-gradient(145deg, #fff8e0, #ffe4a0);
-  border-color: rgba(255,200,60,0.8);
-  box-shadow: 0 0 12px rgba(255,200,60,0.4), 0 2px 8px rgba(0,0,0,0.4);
-}
-
-.playing-card.glowing {
-  box-shadow: 0 0 16px rgba(180,120,255,0.7), 0 2px 8px rgba(0,0,0,0.5);
-}
-
+/* ── Rank and suit layout ─────────────────────────────────── */
 .card-corner {
   display: flex;
   flex-direction: column;
   align-items: center;
   line-height: 1;
+  z-index: 2;
+  position: relative;
 }
 
-.card-corner-bottom {
-  transform: rotate(180deg);
-}
+.card-corner-bottom { transform: rotate(180deg); }
 
 .card-rank {
   font-weight: 900;
   color: var(--suit-color, #333);
   font-size: 1em;
   line-height: 1.1;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.5);
 }
 
-.card-suit-small {
-  font-size: 0.85em;
-  line-height: 1;
-}
+.card-suit-small { font-size: 0.85em; line-height: 1; }
 
 .card-center {
   position: absolute;
@@ -86,40 +133,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2;
 }
 
-.card-suit-large {
-  font-size: 1.5em;
-}
+.card-suit-large  { font-size: 1.6em; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)); }
+.card-face-icon   { font-size: 1.5em; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)); }
 
-.card-face-icon {
-  font-size: 1.4em;
-}
-
-.playing-card.large .card-suit-large { font-size: 2em; }
-.playing-card.large .card-face-icon  { font-size: 2em; }
-.playing-card.community .card-suit-large { font-size: 1.8em; }
-.playing-card.community .card-face-icon  { font-size: 1.8em; }
+.playing-card.community .card-suit-large { font-size: 2em; }
+.playing-card.community .card-face-icon  { font-size: 1.9em; }
+.playing-card.large .card-suit-large     { font-size: 2.2em; }
+.playing-card.large .card-face-icon      { font-size: 2.1em; }
 
 .card-wild-badge {
   position: absolute;
-  bottom: 14px;
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(255,200,60,0.9);
+  background: rgba(255,200,60,0.92);
   color: #000;
-  font-size: 0.45em;
+  font-size: 0.42em;
   font-weight: 900;
-  padding: 1px 4px;
+  padding: 1px 5px;
   border-radius: 3px;
   letter-spacing: 0.05em;
+  z-index: 6;
 }
 
 .card-promoted-badge,
 .card-suit-override-badge {
   position: absolute;
   top: 2px;
-  right: 2px;
-  font-size: 0.6em;
-  opacity: 0.7;
+  right: 3px;
+  font-size: 0.55em;
+  opacity: 0.65;
+  z-index: 6;
 }

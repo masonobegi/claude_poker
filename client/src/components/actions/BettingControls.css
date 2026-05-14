@@ -2,10 +2,12 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  background: rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px;
-  padding: 0.6rem 0.8rem;
+  background: rgba(5,2,20,0.88);
+  border: 1px solid rgba(140,80,255,0.25);
+  border-radius: 14px;
+  padding: 0.65rem 0.9rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(80,40,160,0.1);
+  backdrop-filter: blur(4px);
 }
 
 .bet-btn {

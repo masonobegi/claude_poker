@@ -5,6 +5,7 @@ import './styles/global.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <div className="nebula" />
     <App />
   </React.StrictMode>
 );

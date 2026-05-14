@@ -22,6 +22,7 @@ export default function App() {
   const [reactiveWindow, setReactiveWindow] = useState(null);
   const [spinnerData, setSpinnerData] = useState(null);
   const [needSell, setNeedSell] = useState(false);
+  const [spellBurst, setSpellBurst] = useState(false);
 
   const notify = useCallback((msg, type = 'info') => {
     setNotification({ msg, type });
@@ -63,6 +64,7 @@ export default function App() {
     });
     socket.on('game:powerCardPlayed', ({ card, result: resultMsg, spinResult, coinResult, targetName }) => {
       audioEngine.play('spell');
+      setSpellBurst(true);
       if (spinResult) {
         setSpinnerData({ result: Array.isArray(spinResult) ? spinResult[0] : spinResult });
       }
@@ -167,6 +169,8 @@ export default function App() {
       coinPrompt={coinPrompt}
       reactiveWindow={reactiveWindow}
       spinnerData={spinnerData}
+      spellBurst={spellBurst}
+      onSpellBurstDone={() => setSpellBurst(false)}
       needSell={needSell}
       onSpinnerClose={() => setSpinnerData(null)}
       actions={actions}

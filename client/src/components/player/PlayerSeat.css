@@ -3,92 +3,92 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  min-width: 100px;
-  transition: opacity 0.3s;
+  gap: 5px;
+  min-width: 110px;
+  transition: opacity 0.3s, transform 0.2s;
 }
 
-.player-seat.folded { opacity: 0.45; }
-.player-seat.eliminated { opacity: 0.25; }
+.player-seat.folded { opacity: 0.35; }
+.player-seat.eliminated { opacity: 0.2; }
+.player-seat.me { filter: drop-shadow(0 0 6px rgba(140,80,255,0.4)); }
 
+/* ── Dealer / blind badges ────────────────────────────────── */
 .player-badges {
   display: flex;
   gap: 3px;
   position: absolute;
-  top: -12px;
+  top: -14px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
 }
 
 .badge {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   font-size: 0.55rem;
   font-weight: 900;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(0,0,0,0.4);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  border: 1.5px solid rgba(0,0,0,0.5);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
 }
 
 .badge-dealer {
-  background: #f0d060;
+  background: radial-gradient(circle, #ffe066, #d4a000);
   color: #000;
+  box-shadow: 0 0 8px rgba(255,200,60,0.6), 0 2px 6px rgba(0,0,0,0.6);
 }
+.badge-sb { background: radial-gradient(circle, #80c8ff, #2070c0); color: #fff; }
+.badge-bb { background: radial-gradient(circle, #ffb060, #c06000); color: #fff; }
 
-.badge-sb {
-  background: #a0c8ff;
-  color: #000;
-}
-
-.badge-bb {
-  background: #ffb060;
-  color: #000;
-}
-
+/* ── Hole cards ───────────────────────────────────────────── */
 .player-cards {
   display: flex;
-  gap: 3px;
+  gap: 4px;
 }
 
 .card-slot-empty {
-  width: 38px;
-  height: 54px;
-  border-radius: 5px;
-  border: 1px dashed rgba(255,255,255,0.1);
-  background: rgba(0,0,0,0.2);
+  width: 52px;
+  height: 76px;
+  border-radius: 7px;
+  border: 1px dashed rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.25);
 }
 
+/* ── Info panel ───────────────────────────────────────────── */
 .player-info {
   text-align: center;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.75);
   border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
-  padding: 3px 8px;
-  min-width: 80px;
+  border-radius: 10px;
+  padding: 4px 10px;
+  min-width: 90px;
+  backdrop-filter: blur(4px);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .player-seat.me .player-info {
-  border-color: rgba(120,80,220,0.5);
-  background: rgba(30,10,60,0.85);
+  border-color: rgba(140,80,255,0.5);
+  background: rgba(30,10,60,0.88);
+  box-shadow: 0 0 12px rgba(100,50,200,0.2);
 }
 
 .player-seat.active .player-info {
-  border-color: rgba(255,200,60,0.6);
-  box-shadow: 0 0 12px rgba(255,200,60,0.2);
+  border-color: rgba(255,200,60,0.8);
+  box-shadow: 0 0 16px rgba(255,200,60,0.3);
 }
 
 .player-name {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 90px;
-  color: #e0e0e0;
+  max-width: 96px;
+  color: #ddd;
 }
 
 .player-card-count {
@@ -98,78 +98,84 @@
 }
 
 .player-chips {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--gold);
+  text-shadow: 0 0 8px var(--gold-glow);
 }
 
-.player-bet {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 0.72rem;
-  position: absolute;
-  bottom: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.75);
-  border-radius: 10px;
-  padding: 2px 6px;
-  white-space: nowrap;
-  border: 1px solid rgba(255,200,60,0.2);
-}
-
-.player-bet-chip { font-size: 0.7rem; }
-.player-bet-amount { color: var(--gold); font-weight: 600; }
-
+/* ── Status overlays ──────────────────────────────────────── */
 .player-status-overlay {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-8deg);
+  background: rgba(0,0,0,0.82);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.55);
+  pointer-events: none;
+  backdrop-filter: blur(2px);
+}
+
+.player-status-overlay.allin {
+  background: rgba(200,80,0,0.85);
+  border-color: rgba(255,160,0,0.7);
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255,140,0,0.8);
+}
+
+.player-status-overlay.bust {
+  background: rgba(100,0,0,0.85);
+  border-color: rgba(200,0,0,0.5);
+  color: #ff8080;
+}
+
+/* ── Best hand (showdown) ─────────────────────────────────── */
+.player-best-hand {
+  font-size: 0.68rem;
+  color: var(--gold);
+  background: rgba(0,0,0,0.85);
+  border: 1px solid rgba(255,200,60,0.4);
+  border-radius: 7px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  text-shadow: 0 0 8px var(--gold-glow);
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ── Active indicator ring ────────────────────────────────── */
+.player-active-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 14px;
+  border: 2px solid rgba(255,200,60,0.85);
+  box-shadow:
+    0 0 16px rgba(255,200,60,0.4),
+    inset 0 0 8px rgba(255,200,60,0.1);
+  pointer-events: none;
+  animation: activeRing 1s ease-in-out infinite;
+}
+
+@keyframes activeRing {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(1.02); }
+}
+
+/* ── Folded card X overlay ────────────────────────────────── */
+.player-seat.folded .player-cards::after {
+  content: '✕';
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0,0,0,0.75);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 6px;
-  padding: 2px 6px;
-  font-size: 0.65rem;
+  font-size: 2rem;
+  color: rgba(255,80,80,0.5);
   font-weight: 900;
-  letter-spacing: 0.05em;
-  color: rgba(255,255,255,0.6);
   pointer-events: none;
 }
-
-.player-status-overlay.allin {
-  background: rgba(255,100,0,0.8);
-  border-color: rgba(255,160,0,0.6);
-  color: #fff;
-}
-
-.player-status-overlay.bust {
-  background: rgba(120,0,0,0.8);
-  color: #ff9090;
-}
-
-.player-best-hand {
-  font-size: 0.65rem;
-  color: var(--gold);
-  background: rgba(0,0,0,0.8);
-  border: 1px solid rgba(255,200,60,0.3);
-  border-radius: 6px;
-  padding: 2px 6px;
-  white-space: nowrap;
-}
-
-.player-active-ring {
-  position: absolute;
-  inset: -6px;
-  border-radius: 12px;
-  border: 2px solid rgba(255,200,60,0.7);
-  box-shadow: 0 0 12px rgba(255,200,60,0.3);
-  pointer-events: none;
-  animation: activeRing 1.2s ease-in-out infinite;
-}
-
-@keyframes activeRing {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
+.player-seat.folded .player-cards { position: relative; }

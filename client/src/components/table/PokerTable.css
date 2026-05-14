@@ -7,44 +7,53 @@
   justify-content: center;
 }
 
+/* ── Oval felt surface ────────────────────────────────────── */
 .poker-felt {
   width: 82%;
-  height: 80%;
-  max-width: 880px;
-  max-height: 480px;
+  height: 82%;
+  max-width: 900px;
+  max-height: 500px;
   border-radius: 50%;
   position: relative;
-  background: radial-gradient(ellipse at center,
-    #0f5c2e 0%,
-    #0a4a25 40%,
-    #083a1d 70%,
-    #062e17 100%
-  );
+
+  /* Rich layered felt look */
+  background:
+    radial-gradient(ellipse at 35% 35%, #177a3a 0%, #0f5c2b 30%, #0a4820 60%, #07361a 100%);
+
+  /* Wood rim: outer glow → thick dark border → golden inner edge */
   box-shadow:
-    0 0 0 12px #2d1a0e,
-    0 0 0 16px #1a0e07,
-    0 0 60px rgba(0,0,0,0.8),
-    inset 0 0 80px rgba(0,0,0,0.3);
+    0 0 0 3px  #b8860b,
+    0 0 0 18px #2c1505,
+    0 0 0 20px #8b6914,
+    0 0 60px rgba(0,0,0,0.9),
+    0 0 120px rgba(0,0,0,0.6),
+    inset 0 0 100px rgba(0,0,0,0.4),
+    inset 0 0 30px rgba(20,80,40,0.3);
 }
 
+/* Felt stitch line */
 .poker-felt::before {
   content: '';
   position: absolute;
-  inset: 6px;
+  inset: 10px;
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.06);
+  border: 1.5px dashed rgba(255,255,255,0.07);
   pointer-events: none;
+  z-index: 1;
 }
 
-/* Subtle wizard pattern overlay */
+/* Ambient center spotlight */
 .poker-felt::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background-image: radial-gradient(circle at 30% 30%, rgba(120,60,220,0.05) 0%, transparent 50%),
-                    radial-gradient(circle at 70% 70%, rgba(60,20,120,0.08) 0%, transparent 40%);
+  background:
+    radial-gradient(ellipse 40% 30% at 50% 45%, rgba(30,140,70,0.25) 0%, transparent 100%),
+    radial-gradient(ellipse at 30% 30%, rgba(120,40,200,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 70%, rgba(60,20,160,0.05) 0%, transparent 40%);
   pointer-events: none;
+  z-index: 1;
 }
 
 .poker-felt-inner {
@@ -53,25 +62,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2;
 }
 
 .poker-center {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
 }
 
 .poker-mod-badge {
   background: rgba(0,0,0,0.7);
   border: 1px solid var(--gold);
   border-radius: 6px;
-  padding: 0.2rem 0.6rem;
+  padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
   color: var(--gold);
   text-shadow: 0 0 10px rgba(255,200,60,0.5);
+  animation: goldPulse 2s ease-in-out infinite;
 }
 
+/* ── Seat and bet chip positioning ────────────────────────── */
 .poker-seat-anchor {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -89,23 +101,24 @@
   display: flex;
   align-items: center;
   gap: 3px;
-  background: rgba(0,0,0,0.75);
-  border: 1px solid rgba(255,200,60,0.5);
+  background: rgba(0,0,0,0.82);
+  border: 1px solid rgba(255,200,60,0.6);
   border-radius: 12px;
-  padding: 3px 8px;
+  padding: 4px 10px;
   white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-  animation: betPop 0.2s ease-out;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.6), 0 0 8px rgba(255,200,60,0.15);
+  animation: betPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes betPop {
-  from { transform: scale(0.7); opacity: 0; }
+  from { transform: scale(0.5); opacity: 0; }
   to   { transform: scale(1);   opacity: 1; }
 }
 
-.poker-bet-chip-coin { font-size: 0.85rem; }
+.poker-bet-chip-coin { font-size: 0.9rem; }
 .poker-bet-chip-amount {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--gold);
+  text-shadow: 0 0 8px var(--gold-glow);
 }

@@ -1,0 +1,87 @@
+.spell-burst-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.spell-burst-center {
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+/* Full-screen purple flash */
+.spell-burst-flash {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center,
+    rgba(160,80,255,0.25) 0%,
+    rgba(80,20,160,0.1) 40%,
+    transparent 70%
+  );
+  animation: burstFlash 0.5s ease-out forwards;
+}
+
+@keyframes burstFlash {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Expanding rings */
+.spell-burst-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(180,100,255,0.8);
+  transform: translate(-50%, -50%);
+  animation: burstRing 0.7s ease-out forwards;
+}
+
+.spell-burst-ring-2 {
+  border-color: rgba(255,200,60,0.6);
+  animation-delay: 0.12s;
+}
+
+@keyframes burstRing {
+  0%   { width: 20px; height: 20px; opacity: 1; }
+  100% { width: 200px; height: 200px; opacity: 0; }
+}
+
+/* Individual particles */
+.spell-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: calc(var(--size) * 1rem);
+  color: var(--color);
+  text-shadow: 0 0 8px var(--color);
+  transform-origin: 0 0;
+  animation: burstParticle var(--dur) ease-out var(--delay) forwards;
+  opacity: 0;
+}
+
+@keyframes burstParticle {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%)
+               rotate(var(--angle))
+               translateX(10px)
+               scale(1.4);
+  }
+  60% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%)
+               rotate(var(--angle))
+               translateX(var(--dist))
+               scale(0.3);
+  }
+}
