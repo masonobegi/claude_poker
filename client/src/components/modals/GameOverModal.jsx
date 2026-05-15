@@ -43,7 +43,7 @@ export default function GameOverModal({ players, playerId }) {
           className="gameover-reload"
           onClick={() => window.location.reload()}
         >
-          🔄 Play Again
+          Play Again
         </button>
       </div>
     </div>

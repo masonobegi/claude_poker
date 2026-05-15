@@ -152,6 +152,7 @@ function makeRoom() {
         'No spell to copy',
         'Turn/river not yet revealed',
         'No flop yet',
+        'Deck empty',
         'Cannot promote/demote further',
         'Target has no spell cards',
         'Target has no cards',

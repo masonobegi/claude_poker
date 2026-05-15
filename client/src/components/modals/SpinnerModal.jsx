@@ -49,7 +49,7 @@ export default function SpinnerModal({ result, onClose }) {
   return (
     <div className="spinner-overlay" onClick={phase === 'done' ? onClose : undefined}>
       <div className="spinner-modal">
-        <div className="spinner-title">🎰 Spinning…</div>
+        <div className="spinner-title">Spinning…</div>
 
         <div className="spinner-wheel-wrap">
           {/* Static labeled segments */}

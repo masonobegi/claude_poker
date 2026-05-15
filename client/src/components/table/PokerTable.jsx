@@ -43,7 +43,7 @@ export default function PokerTable({ gameState, playerId, onSellCard }) {
             <CommunityCards cards={communityCards} phase={phase} />
             <Pot pot={pot} rolloverPot={rolloverPot} bigBlind={bigBlind} />
             {mods.reverseReverse && (
-              <div className="poker-mod-badge reverse">🔃 LOWEST WINS</div>
+              <div className="poker-mod-badge reverse">LOWEST WINS</div>
             )}
           </div>
         </div>

@@ -11,7 +11,7 @@ export default function GameLog({ entries, open, onClose }) {
   return (
     <div className={`gamelog-drawer ${open ? 'open' : ''}`}>
       <div className="gamelog-header">
-        <span>📜 Game Log</span>
+        <span>Game Log</span>
         <button className="gamelog-close" onClick={onClose}>✕</button>
       </div>
       <div className="gamelog-entries">

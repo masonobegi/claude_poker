@@ -30,7 +30,7 @@ function evaluateAllHands(players, communityCards, mods) {
   const results = [];
   for (const p of players) {
     if (p.hasFolded || p.eliminated) continue;
-    const allCards = [...p.holeCards, ...communityCards];
+    const allCards = [...p.holeCards, ...communityCards].filter(Boolean);
     const bestHand = findBestHand(allCards, mods);
     results.push({ playerId: p.id, player: p, bestHand });
   }

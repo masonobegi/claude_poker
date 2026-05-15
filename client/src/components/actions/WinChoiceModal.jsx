@@ -18,7 +18,7 @@ export default function WinChoiceModal({ data, onChoose }) {
     <div className="winchoice-overlay">
       <div className="winchoice-modal">
         <div className="winchoice-header">
-          🏆 You Win!
+          You Win!
         </div>
 
         <p className="winchoice-subtitle">Pot: <strong>{fmt(pot)}</strong> chips — choose your reward:</p>
@@ -28,7 +28,7 @@ export default function WinChoiceModal({ data, onChoose }) {
             className={`winchoice-option ${choice === 'full' ? 'selected' : ''}`}
             onClick={() => setChoice('full')}
           >
-            <div className="winchoice-option-icon">💰</div>
+            <div className="winchoice-option-icon">Full</div>
             <div className="winchoice-option-body">
               <div className="winchoice-option-title">Full Pot</div>
               <div className="winchoice-option-desc">Take {fmt(pot)} chips + draw a power card</div>
@@ -39,7 +39,7 @@ export default function WinChoiceModal({ data, onChoose }) {
             className={`winchoice-option ${choice === 'half' ? 'selected' : ''}`}
             onClick={() => setChoice('half')}
           >
-            <div className="winchoice-option-icon">🃏</div>
+            <div className="winchoice-option-icon">Half</div>
             <div className="winchoice-option-body">
               <div className="winchoice-option-title">Half Pot + Steal</div>
               <div className="winchoice-option-desc">

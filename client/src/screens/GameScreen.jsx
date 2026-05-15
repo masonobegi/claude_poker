@@ -16,7 +16,7 @@ function SkipButton({ phase, skipVotes, onSkip, playerId }) {
       disabled={alreadyVoted}
       title="Vote to skip the countdown"
     >
-      {alreadyVoted ? '✓ Ready' : '⏭ Skip'}
+      {alreadyVoted ? 'Ready' : 'Skip'}
       {skipVotes && <span className="skip-count"> {skipVotes.count}/{skipVotes.total}</span>}
     </button>
   );
@@ -60,7 +60,6 @@ export default function GameScreen({
   if (!gameState) {
     return (
       <div className="game-loading">
-        <div className="home-wizard-icon">🧙‍♂️</div>
         <p>Loading game...</p>
       </div>
     );
@@ -140,7 +139,7 @@ export default function GameScreen({
             className="game-log-toggle"
             onClick={() => setLogOpen(o => !o)}
           >
-            📜 Log
+            Log
           </button>
         </div>
       </div>

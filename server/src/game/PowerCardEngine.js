@@ -143,10 +143,16 @@ function resolveEffect(game, playerId, card, opts = {}) {
 
     // ── Reflop ────────────────────────────────────────────────────────────────
     case 'reflop': {
-      if (game.communityCards.length < 3) return { success: false, message: 'No flop' };
+      if (game.communityCards.length < 3) return { success: false, message: 'No flop yet' };
       const oldFlop = game.communityCards.splice(0, 3);
       game.deck.addToDiscard(oldFlop);
-      const newFlop = game.deck.deal(3);
+      const newFlop = game.deck.deal(3).filter(Boolean);
+      if (newFlop.length < 3) {
+        // Deck exhausted — restore old flop and abort
+        game.deck.addToDiscard(newFlop);
+        game.communityCards.unshift(...oldFlop);
+        return { success: false, message: 'Deck empty' };
+      }
       game.communityCards.unshift(...newFlop);
       return { success: true, message: 'Flop replaced' };
     }
@@ -190,6 +196,11 @@ function resolveEffect(game, playerId, card, opts = {}) {
       const replaced = game.communityCards.pop();
       game.deck.addToDiscard([replaced]);
       const newCard = game.deck.dealOne();
+      if (!newCard) {
+        // Deck exhausted — restore the card and abort
+        game.communityCards.push(replaced);
+        return { success: false, message: 'Deck empty' };
+      }
       game.communityCards.push(newCard);
       return { success: true, message: 'Turn/River card replaced' };
     }

@@ -7,7 +7,7 @@ export default function RankChooserModal({ drawnRanks, instanceId, onChoose }) {
   return (
     <div className="rank-overlay">
       <div className="rank-modal">
-        <div className="rank-title">🎴 Rank Bag Draw</div>
+        <div className="rank-title">Rank Bag Draw</div>
         <p className="rank-desc">Two ranks were drawn. Choose one to activate.</p>
         <div className="rank-options">
           {drawnRanks.map(rank => (

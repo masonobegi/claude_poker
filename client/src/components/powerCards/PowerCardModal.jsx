@@ -128,7 +128,7 @@ export default function PowerCardModal({ card, phase, gameState, playerId, canPl
             <select className="pcmodal-select" value={targetPlayerId} onChange={e => setTargetPlayerId(e.target.value)}>
               <option value="">-- Choose --</option>
               {otherPlayers.map(p => (
-                <option key={p.id} value={p.id}>{p.isBot ? '🤖' : '🧙'} {p.name}</option>
+                <option key={p.id} value={p.id}>{p.name}{p.isBot ? ' (AI)' : ''}</option>
               ))}
             </select>
           </div>
@@ -154,8 +154,8 @@ export default function PowerCardModal({ card, phase, gameState, playerId, canPl
         {canPlay && !card.requiresInput && card.type === 'SPELL' && (
           <div className="pcmodal-note">
             {card.definitionId.includes('spin') || ['burned','mirrored','eye_patch','hot_potato','drained'].includes(card.definitionId)
-              ? '🎲 The spinner will be rolled automatically.'
-              : '✨ This card activates immediately.'}
+              ? 'The spinner will be rolled automatically.'
+              : 'This card activates immediately.'}
           </div>
         )}
 
@@ -167,11 +167,11 @@ export default function PowerCardModal({ card, phase, gameState, playerId, canPl
               onClick={() => onPlay(card, buildOpts())}
               disabled={!isReadyToPlay()}
             >
-              ✨ Play Card
+              Play Card
             </button>
           )}
           <button className="pcmodal-btn pcmodal-sell" onClick={onSell}>
-            💰 Sell ({card.sellValue} BB)
+            Sell ({card.sellValue} BB)
           </button>
           <button className="pcmodal-btn pcmodal-cancel" onClick={onClose}>
             Close
