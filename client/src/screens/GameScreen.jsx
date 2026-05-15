@@ -123,19 +123,6 @@ export default function GameScreen({
             {myCurrentHand && <CurrentHandDisplay hand={myCurrentHand} />}
           </div>
 
-          {/* Power card hand */}
-          <PowerCardHand
-            cards={myPowerCards}
-            phase={gameState.phase}
-            gameState={gameState}
-            selectedCard={selectedCard}
-            onSelect={setSelectedCard}
-            onPlay={handlePowerCardPlay}
-            onSell={actions.sellPowerCard}
-            needSell={needSell}
-            playerId={playerId}
-          />
-
           {/* Betting controls */}
           {isBettingPhase && isMyTurn && (
             <BettingControls
@@ -156,6 +143,21 @@ export default function GameScreen({
             📜 Log
           </button>
         </div>
+      </div>
+
+      {/* Right-side power card panel */}
+      <div className="game-power-panel">
+        <PowerCardHand
+          cards={myPowerCards}
+          phase={gameState.phase}
+          gameState={gameState}
+          selectedCard={selectedCard}
+          onSelect={setSelectedCard}
+          onPlay={handlePowerCardPlay}
+          onSell={actions.sellPowerCard}
+          needSell={needSell}
+          playerId={playerId}
+        />
       </div>
 
       {/* Game Log drawer */}

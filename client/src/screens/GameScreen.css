@@ -108,6 +108,25 @@
   padding-top: 0.5rem;
 }
 
+/* ── Fixed right power-card panel ─────────────────────────────── */
+.game-power-panel {
+  position: fixed;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  max-height: 78vh;
+  overflow-y: auto;
+  overflow-x: visible;
+  padding: 0.5rem 0.5rem 0.5rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140,80,255,0.3) transparent;
+  pointer-events: none; /* let clicks through the empty area */
+}
+.game-power-panel > * { pointer-events: all; }
+
 .skip-btn {
   padding: 0.35rem 0.7rem;
   background: rgba(255,255,255,0.06);

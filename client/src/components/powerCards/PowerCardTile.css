@@ -3,12 +3,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 104px;
-  padding: 0 0 7px 0;
+  width: 172px;
+  padding: 0 0 10px 0;
   overflow: hidden;
   background: linear-gradient(160deg, rgba(30,10,60,0.97), rgba(15,5,35,0.99));
   border: 1.5px solid var(--type-color, #888);
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
   user-select: none;
@@ -23,9 +23,9 @@
 }
 
 .power-tile.playable:hover {
-  transform: translateY(-10px) scale(1.08);
+  transform: translateX(-8px) scale(1.05);
   box-shadow:
-    0 0 24px color-mix(in srgb, var(--type-color) 80%, transparent),
+    0 0 28px color-mix(in srgb, var(--type-color) 80%, transparent),
     0 12px 20px rgba(0,0,0,0.5);
   z-index: 50;
 }
@@ -48,11 +48,11 @@
 /* AI art fills the top of the tile */
 .power-tile-art-wrap {
   width: 100%;
-  height: 70px;
+  height: 120px;
   overflow: hidden;
   position: relative;
   background: rgba(0,0,0,0.4);
-  border-radius: 10px 10px 0 0;
+  border-radius: 12px 12px 0 0;
 }
 
 .power-tile-art {
@@ -88,16 +88,16 @@
 
 /* Card name always white with a text shadow so it reads over anything */
 .power-tile-name {
-  font-size: 0.66rem;
+  font-size: 0.82rem;
   text-align: center;
   color: #fff;
   text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.8);
-  line-height: 1.25;
+  line-height: 1.3;
   font-weight: 700;
   word-break: break-word;
   max-width: 100%;
-  padding: 0 4px;
-  margin-top: 4px;
+  padding: 0 6px;
+  margin-top: 6px;
 }
 
 /* Tint the name with the type color as a glow rather than the fill */
@@ -126,10 +126,10 @@
 /* ── Hover Tooltip ────────────────────────────────────────────── */
 .power-tile-tooltip {
   position: absolute;
-  bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: 240px;
+  top: 50%;
+  right: calc(100% + 12px);
+  transform: translateY(-50%);
+  width: 260px;
   background: linear-gradient(160deg, #1e0848, #0e0525);
   border: 1px solid var(--type-color, #888);
   border-radius: 12px;
@@ -143,18 +143,19 @@
 }
 
 @keyframes tooltipIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  from { opacity: 0; transform: translateY(-50%) translateX(6px); }
+  to   { opacity: 1; transform: translateY(-50%) translateX(0); }
 }
 
+/* Arrow pointing right toward the card */
 .power-tile-tooltip::after {
   content: '';
   position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
   border: 7px solid transparent;
-  border-top-color: var(--type-color, #888);
+  border-left-color: var(--type-color, #888);
 }
 
 .ptt-header {

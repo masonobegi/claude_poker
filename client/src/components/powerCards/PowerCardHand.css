@@ -1,13 +1,8 @@
 .power-hand {
   display: flex;
-  gap: 0.5rem;
-  align-items: flex-end;
-  justify-content: center;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  padding: 0 0.5rem 0.25rem;
-  max-width: 100%;
-  scrollbar-width: thin;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: stretch;
 }
 
 .power-hand-empty {

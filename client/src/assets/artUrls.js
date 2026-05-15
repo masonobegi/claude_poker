@@ -23,8 +23,8 @@ export const CARD_BACK_ART = art(
 );
 
 // ── Atmospheric backgrounds ───────────────────────────────────────────────────
-export const GAME_BG_ART = art(
-  'luxury casino interior at night, wizard themed, dark velvet walls adorned with glowing magical runes, atmospheric purple and gold candlelight, arcane bookshelves, mystical atmosphere, cinematic wide shot',
+export const GAME_BG_ART = envArt(
+  'luxury enchanted wizard casino interior, vaulted gothic stone cathedral ceiling with glowing arcane crystal chandeliers, rich deep purple velvet walls embroidered with golden magical runes, ornate mahogany poker tables inlaid with glowing gemstones, tall brass candelabras casting warm amber light, ancient leather-bound spellbooks lining bookshelves, swirling magical mist rolling slowly along marble floor, stained glass windows glowing with arcane light, ultra wide cinematic angle, volumetric atmospheric lighting, photorealistic dark fantasy environment, masterpiece, 8k',
   1920, 1080, 106
 );
 
