@@ -30,7 +30,17 @@
   margin-bottom: 0.6rem;
 }
 
-.reactive-spell-icon { font-size: 1.8rem; flex-shrink: 0; line-height: 1.1; }
+.reactive-spell-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1.5px solid color-mix(in srgb, var(--tc, #9966ff) 60%, transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--tc, #9966ff) 30%, transparent);
+}
+.reactive-spell-art { width: 100%; height: 100%; object-fit: cover; }
+.reactive-spell-art-fallback { width: 100%; height: 100%; }
 
 .reactive-spell-info { flex: 1; min-width: 0; }
 
@@ -83,6 +93,35 @@
 
 .reactive-actions { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
 
+.reactive-btn-x {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 900;
+  margin-right: 0.3rem;
+}
+
+.reactive-btn-copy-icon {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 2px solid currentColor;
+  border-radius: 2px;
+  margin-right: 0.4rem;
+  position: relative;
+  vertical-align: middle;
+}
+.reactive-btn-copy-icon::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid currentColor;
+  border-radius: 2px;
+  background: transparent;
+}
+
 .reactive-btn {
   flex: 1;
   padding: 0.55rem 0.75rem;
@@ -92,6 +131,9 @@
   cursor: pointer;
   transition: all 0.15s;
   border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .reactive-veto {

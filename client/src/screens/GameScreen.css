@@ -117,15 +117,46 @@
   z-index: 50;
   display: flex;
   flex-direction: column;
-  max-height: 78vh;
+  gap: 0.5rem;
+  max-height: 82vh;
   overflow-y: auto;
   overflow-x: visible;
   padding: 0.5rem 0.5rem 0.5rem 0;
   scrollbar-width: thin;
   scrollbar-color: rgba(140,80,255,0.3) transparent;
-  pointer-events: none; /* let clicks through the empty area */
+  pointer-events: none;
 }
 .game-power-panel > * { pointer-events: all; }
+
+.game-power-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(180,120,255,0.6);
+  font-weight: 700;
+  padding: 0 0.25rem;
+}
+
+.game-power-panel-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(180,120,255,0.7);
+  box-shadow: 0 0 6px rgba(140,80,255,0.5);
+}
+
+.game-power-panel-count {
+  margin-left: auto;
+  background: rgba(140,80,255,0.2);
+  border: 1px solid rgba(140,80,255,0.3);
+  border-radius: 8px;
+  padding: 0 5px;
+  color: rgba(200,150,255,0.8);
+  font-size: 0.6rem;
+}
 
 .skip-btn {
   padding: 0.35rem 0.7rem;

@@ -38,14 +38,14 @@ export default function PhaseWindowBanner({ phase, phaseDeadline, myPlayableCard
   return (
     <div className={`phase-window-banner ${hasPlayable ? 'has-playable' : ''}`}>
       <div className="pwb-left">
-        <span className="pwb-icon">⏳</span>
+        <div className={`pwb-pulse-dot ${secondsLeft <= 3 ? 'urgent' : ''}`} />
         <div>
-          <div className="pwb-label">{info.label} Window</div>
-          <div className="pwb-desc">{info.desc}</div>
+          <div className="pwb-label">{info.label}</div>
+          {hasPlayable && <div className="pwb-playable-hint">You have cards to play</div>}
         </div>
       </div>
       <div className="pwb-right">
-        <div className="pwb-timer">{secondsLeft}s</div>
+        <div className={`pwb-timer ${secondsLeft <= 3 ? 'urgent' : ''}`}>{secondsLeft}s</div>
         <div className="pwb-bar-wrap">
           <div
             className="pwb-bar-fill"

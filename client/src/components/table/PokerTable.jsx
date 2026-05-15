@@ -60,7 +60,7 @@ export default function PokerTable({ gameState, playerId, onSellCard }) {
             style={{ left: betPos.left, top: betPos.top }}
           >
             <div className="poker-bet-chip">
-              <span className="poker-bet-chip-coin">🟡</span>
+              <div className="poker-bet-coin" />
               <span className="poker-bet-chip-amount">{fmt(player.currentBet)}</span>
             </div>
           </div>

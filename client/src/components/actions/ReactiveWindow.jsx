@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { POWER_ART } from '../../assets/artUrls';
 import './ReactiveWindow.css';
 
 const TYPE_COLOR = {
@@ -28,7 +29,12 @@ export default function ReactiveWindow({ data, queue, myPowerCards, onPlay }) {
 
         {/* Active spell */}
         <div className="reactive-active-spell">
-          <span className="reactive-spell-icon">{data.triggeringCard?.icon || '✨'}</span>
+          <div className="reactive-spell-thumb" style={{ '--tc': color }}>
+            {POWER_ART[data.triggeringCard?.definitionId]
+              ? <img src={POWER_ART[data.triggeringCard.definitionId]} className="reactive-spell-art" alt="" />
+              : <div className="reactive-spell-art-fallback" style={{ background: `linear-gradient(135deg, ${color}44, ${color}22)` }} />
+            }
+          </div>
           <div className="reactive-spell-info">
             <div className="reactive-spell-name" style={{ color }}>
               {data.triggeringCard?.name || 'Spell'} <span className="reactive-verb">was played</span>
@@ -53,12 +59,12 @@ export default function ReactiveWindow({ data, queue, myPowerCards, onPlay }) {
           <div className="reactive-actions">
             {vetoCard && (
               <button className="reactive-btn reactive-veto" onClick={() => onPlay(vetoCard.instanceId)}>
-                ❌ Veto — Cancel this spell
+                <span className="reactive-btn-x">✕</span> Veto
               </button>
             )}
             {copyCard && (
               <button className="reactive-btn reactive-copy" onClick={() => onPlay(copyCard.instanceId)}>
-                📠 Copy — Duplicate this spell
+                <span className="reactive-btn-copy-icon" /> Copy
               </button>
             )}
           </div>

@@ -129,6 +129,7 @@ export default function GameScreen({
               minRaise={gameState.currentBet + gameState.bigBlind}
               maxRaise={(me?.chips || 0) + (me?.currentBet || 0)}
               chips={me?.chips || 0}
+              pot={gameState.pot + (gameState.rolloverPot || 0)}
               onAction={actions.gameAction}
             />
           )}
@@ -146,6 +147,13 @@ export default function GameScreen({
 
       {/* Right-side power card panel */}
       <div className="game-power-panel">
+        {myPowerCards.length > 0 && (
+          <div className="game-power-panel-header">
+            <div className="game-power-panel-dot" />
+            Your Spells
+            <span className="game-power-panel-count">{myPowerCards.length}</span>
+          </div>
+        )}
         <PowerCardHand
           cards={myPowerCards}
           phase={gameState.phase}

@@ -6,15 +6,22 @@ function fmt(n) {
   return String(n);
 }
 
-export default function Pot({ pot, rolloverPot, bigBlind }) {
+export default function Pot({ pot, rolloverPot }) {
   if (pot <= 0 && rolloverPot <= 0) return null;
   return (
     <div className="pot-display">
-      <span className="pot-chip">🟡</span>
-      <span className="pot-amount">{fmt(pot)}</span>
-      {rolloverPot > 0 && (
-        <span className="pot-rollover">+{fmt(rolloverPot)} rollover</span>
-      )}
+      <div className="pot-chip-stack">
+        <div className="pot-chip pc1" />
+        <div className="pot-chip pc2" />
+        <div className="pot-chip pc3" />
+      </div>
+      <div className="pot-text">
+        <div className="pot-label">POT</div>
+        <div className="pot-amount">{fmt(pot)}</div>
+        {rolloverPot > 0 && (
+          <div className="pot-rollover">+{fmt(rolloverPot)} rollover</div>
+        )}
+      </div>
     </div>
   );
 }

@@ -17,35 +17,46 @@ export default function WinChoiceModal({ data, onChoose }) {
   return (
     <div className="winchoice-overlay">
       <div className="winchoice-modal">
-        <div className="winchoice-header">
-          You Win!
+        <div className="winchoice-crown" />
+        <div className="winchoice-header">Victory</div>
+        <div className="winchoice-pot-line">
+          <div className="winchoice-pot-chip" />
+          <span className="winchoice-pot-num">{fmt(pot)}</span>
+          <span className="winchoice-pot-label">chips in the pot</span>
         </div>
-
-        <p className="winchoice-subtitle">Pot: <strong>{fmt(pot)}</strong> chips — choose your reward:</p>
 
         <div className="winchoice-options">
           <div
             className={`winchoice-option ${choice === 'full' ? 'selected' : ''}`}
             onClick={() => setChoice('full')}
           >
-            <div className="winchoice-option-icon">Full</div>
-            <div className="winchoice-option-body">
-              <div className="winchoice-option-title">Full Pot</div>
-              <div className="winchoice-option-desc">Take {fmt(pot)} chips + draw a power card</div>
+            <div className="winchoice-option-icon woi-full">
+              <div className="woi-chip-full" />
             </div>
+            <div className="winchoice-option-body">
+              <div className="winchoice-option-title">Take it all</div>
+              <div className="winchoice-option-desc">
+                <strong>{fmt(pot)}</strong> chips + draw a power card
+              </div>
+            </div>
+            {choice === 'full' && <div className="winchoice-check">✓</div>}
           </div>
 
           <div
             className={`winchoice-option ${choice === 'half' ? 'selected' : ''}`}
             onClick={() => setChoice('half')}
           >
-            <div className="winchoice-option-icon">Half</div>
+            <div className="winchoice-option-icon woi-half">
+              <div className="woi-chip-half" />
+              <div className="woi-steal-icon" />
+            </div>
             <div className="winchoice-option-body">
-              <div className="winchoice-option-title">Half Pot + Steal</div>
+              <div className="winchoice-option-title">Half + Steal</div>
               <div className="winchoice-option-desc">
-                Take {fmt(halfPot)} chips, steal a power card, roll {fmt(rolloverAmount)} over
+                <strong>{fmt(halfPot)}</strong> chips, steal a spell, roll {fmt(rolloverAmount)} over
               </div>
             </div>
+            {choice === 'half' && <div className="winchoice-check">✓</div>}
           </div>
         </div>
 
