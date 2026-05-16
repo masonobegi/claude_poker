@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { POWER_ART } from '../../assets/artUrls';
 import './PowerCardModal.css';
 
 const TYPE_COLOR = {
@@ -65,14 +66,21 @@ export default function PowerCardModal({ card, phase, gameState, playerId, canPl
         style={{ '--type-color': color }}
         onClick={e => e.stopPropagation()}
       >
+        {/* Art banner */}
+        {POWER_ART[card.definitionId] && (
+          <div className="pcmodal-art-frame" style={{ borderColor: color, boxShadow: `0 0 30px ${color}44` }}>
+            <img src={POWER_ART[card.definitionId]} className="pcmodal-art-img" alt={card.name} />
+            <div className="pcmodal-art-gradient" style={{ background: `linear-gradient(transparent 40%, #0e0525 100%)` }} />
+          </div>
+        )}
+
         {/* Header */}
         <div className="pcmodal-header">
-          <span className="pcmodal-icon">{card.icon}</span>
           <div>
             <div className="pcmodal-name">{card.name}</div>
-            <div className="pcmodal-type">{card.type}</div>
+            <div className="pcmodal-type" style={{ color }}>{card.type}</div>
           </div>
-          <div className="pcmodal-sell-value">Sell: {card.sellValue} BB</div>
+          <div className="pcmodal-sell-value">{card.sellValue} BB to sell</div>
         </div>
 
         <div className="pcmodal-desc">{card.description}</div>

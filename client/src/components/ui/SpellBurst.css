@@ -8,61 +8,75 @@
   pointer-events: none;
 }
 
-.spell-burst-center {
-  position: relative;
-  width: 0;
-  height: 0;
-}
+.spell-burst-center { position: relative; width: 0; height: 0; }
 
-/* Full-screen purple flash */
 .spell-burst-flash {
   position: fixed;
   inset: 0;
   background: radial-gradient(ellipse at center,
-    rgba(160,80,255,0.25) 0%,
-    rgba(80,20,160,0.1) 40%,
-    transparent 70%
+    rgba(160,80,255,0.5) 0%,
+    rgba(80,20,160,0.22) 35%,
+    transparent 65%
   );
-  animation: burstFlash 0.5s ease-out forwards;
+  animation: burstFlash 0.65s ease-out forwards;
+}
+
+.spell-burst-flash-2 {
+  background: radial-gradient(ellipse at center,
+    rgba(255,200,60,0.22) 0%,
+    transparent 50%
+  );
+  animation: burstFlash 0.5s ease-out 0.1s forwards;
+  opacity: 0;
 }
 
 @keyframes burstFlash {
   0%   { opacity: 0; }
-  15%  { opacity: 1; }
+  18%  { opacity: 1; }
   100% { opacity: 0; }
 }
 
-/* Expanding rings */
+.spell-burst-core {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translate(-50%, -50%);
+  animation: coreBlast 0.4s ease-out forwards;
+  box-shadow: 0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(180,100,255,0.7);
+}
+
+@keyframes coreBlast {
+  0%   { transform: translate(-50%,-50%) scale(1);  opacity: 1; }
+  60%  { transform: translate(-50%,-50%) scale(14); opacity: 0.5; }
+  100% { transform: translate(-50%,-50%) scale(22); opacity: 0; }
+}
+
 .spell-burst-ring {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 20px;
-  height: 20px;
+  top: 50%; left: 50%;
+  width: 16px; height: 16px;
   border-radius: 50%;
-  border: 2px solid rgba(180,100,255,0.8);
+  border: 2.5px solid rgba(180,100,255,0.9);
   transform: translate(-50%, -50%);
-  animation: burstRing 0.7s ease-out forwards;
+  animation: burstRing 0.85s ease-out forwards;
 }
-
-.spell-burst-ring-2 {
-  border-color: rgba(255,200,60,0.6);
-  animation-delay: 0.12s;
-}
+.spell-burst-ring-2 { border-color: rgba(255,200,60,0.7); animation-delay: 0.1s; }
+.spell-burst-ring-3 { border-color: rgba(100,200,255,0.6); animation-delay: 0.2s; }
+.spell-burst-ring-4 { border-color: rgba(255,100,180,0.5); border-width: 1.5px; animation-delay: 0.32s; }
 
 @keyframes burstRing {
-  0%   { width: 20px; height: 20px; opacity: 1; }
-  100% { width: 200px; height: 200px; opacity: 0; }
+  0%   { width: 16px; height: 16px; opacity: 1; }
+  100% { width: 380px; height: 380px; opacity: 0; transform: translate(-50%, -50%); }
 }
 
-/* Individual particles */
 .spell-particle {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 50%; left: 50%;
   font-size: calc(var(--size) * 1rem);
   color: var(--color);
-  text-shadow: 0 0 8px var(--color);
+  text-shadow: 0 0 10px var(--color), 0 0 22px var(--color);
   transform-origin: 0 0;
   animation: burstParticle var(--dur) ease-out var(--delay) forwards;
   opacity: 0;
@@ -71,17 +85,11 @@
 @keyframes burstParticle {
   0% {
     opacity: 1;
-    transform: translate(-50%, -50%)
-               rotate(var(--angle))
-               translateX(10px)
-               scale(1.4);
+    transform: translate(-50%,-50%) rotate(var(--angle)) translateX(10px) scale(1.7);
   }
-  60% { opacity: 1; }
+  55% { opacity: 1; }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%)
-               rotate(var(--angle))
-               translateX(var(--dist))
-               scale(0.3);
+    transform: translate(-50%,-50%) rotate(var(--angle)) translateX(var(--dist)) scale(0.15);
   }
 }

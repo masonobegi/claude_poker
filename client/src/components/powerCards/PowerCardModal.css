@@ -12,21 +12,32 @@
 .pcmodal {
   background: linear-gradient(160deg, #1a0a40, #0e0525);
   border: 1px solid var(--type-color, #888);
-  border-radius: 16px;
-  padding: 1.5rem;
-  width: min(400px, 92vw);
-  box-shadow: 0 0 40px color-mix(in srgb, var(--type-color) 30%, transparent),
-              0 20px 60px rgba(0,0,0,0.7);
+  border-radius: 18px;
+  overflow: hidden;
+  width: min(420px, 92vw);
+  box-shadow:
+    0 0 50px color-mix(in srgb, var(--type-color) 35%, transparent),
+    0 20px 60px rgba(0,0,0,0.8);
 }
+
+.pcmodal-art-frame {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-bottom: 1px solid color-mix(in srgb, var(--type-color, #888) 40%, transparent);
+}
+
+.pcmodal-art-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pcmodal-art-gradient { position: absolute; inset: 0; pointer-events: none; }
 
 .pcmodal-header {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-bottom: 0.75rem;
+  padding: 1.25rem 1.5rem 0;
 }
-
-.pcmodal-icon { font-size: 2rem; }
 
 .pcmodal-name {
   font-size: 1.2rem;
@@ -51,7 +62,7 @@
   color: rgba(255,255,255,0.75);
   font-size: 0.9rem;
   line-height: 1.5;
-  margin-bottom: 1rem;
+  margin: 0 1.5rem 1rem;
   border-left: 2px solid var(--type-color);
   padding-left: 0.75rem;
 }
@@ -60,7 +71,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin: 0 1.5rem 1rem;
 }
 
 .pcmodal-label {
@@ -101,12 +112,13 @@
   padding: 0.5rem 0.75rem;
   font-size: 0.8rem;
   color: var(--text-muted);
-  margin-bottom: 1rem;
+  margin: 0 1.5rem 1rem;
 }
 
 .pcmodal-actions {
   display: flex;
   gap: 0.5rem;
+  padding: 0 1.5rem 1.5rem;
   flex-wrap: wrap;
 }
 

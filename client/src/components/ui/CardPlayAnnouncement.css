@@ -5,184 +5,183 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.65);
-  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.78);
+  backdrop-filter: blur(8px);
   pointer-events: all;
 }
 
-.cpa-overlay.enter {
-  animation: cpaOverlayIn 0.25s ease-out forwards;
-}
-.cpa-overlay.exit {
-  animation: cpaOverlayOut 0.35s ease-in forwards;
-  pointer-events: none;
-}
+.cpa-overlay.enter { animation: cpaOverlayIn 0.2s ease-out forwards; }
+.cpa-overlay.exit  { animation: cpaOverlayOut 0.3s ease-in forwards; pointer-events: none; }
 
-@keyframes cpaOverlayIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes cpaOverlayOut {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
+@keyframes cpaOverlayIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cpaOverlayOut { from { opacity: 1; } to { opacity: 0; } }
 
-/* ── Panel ───────────────────────────────────────────────────── */
+/* ── Panel ─────────────────────────────────────────────────── */
 .cpa-panel {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.65rem;
-  padding: 2rem 2.25rem 1.5rem;
-  width: min(420px, 90vw);
-  background: linear-gradient(160deg, #160840 0%, #0b0425 100%);
-  border: 1.5px solid var(--cpa-color);
-  border-radius: 20px;
+  gap: 0.7rem;
+  padding: 2.25rem 2.5rem 1.5rem;
+  width: min(540px, 93vw);
+  background: linear-gradient(170deg, #1a0848 0%, #0d0330 100%);
+  border: 2px solid var(--cpa-color);
+  border-radius: 24px;
   box-shadow:
-    0 0 60px var(--cpa-glow),
-    0 0 120px color-mix(in srgb, var(--cpa-glow) 50%, transparent),
-    0 24px 60px rgba(0,0,0,0.8);
+    0 0 80px var(--cpa-glow),
+    0 0 160px color-mix(in srgb, var(--cpa-glow) 40%, transparent),
+    0 0 4px var(--cpa-color),
+    0 30px 80px rgba(0,0,0,0.9);
+}
+
+.cpa-panel::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 30px;
+  border: 1.5px solid color-mix(in srgb, var(--cpa-color) 35%, transparent);
+  animation: panelRing 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes panelRing {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.015); }
 }
 
 .cpa-overlay.enter .cpa-panel {
-  animation: cpaPanelIn 0.3s cubic-bezier(0.2, 0.85, 0.3, 1.2) forwards;
+  animation: cpaPanelIn 0.36s cubic-bezier(0.12, 0.8, 0.22, 1.32) forwards;
 }
 .cpa-overlay.exit .cpa-panel {
-  animation: cpaPanelOut 0.35s ease-in forwards;
+  animation: cpaPanelOut 0.3s ease-in forwards;
 }
 
 @keyframes cpaPanelIn {
-  from { transform: scale(0.82) translateY(24px); opacity: 0; }
-  to   { transform: scale(1)    translateY(0);    opacity: 1; }
+  from { transform: scale(0.72) translateY(32px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
 }
 @keyframes cpaPanelOut {
-  from { transform: scale(1)    translateY(0);    opacity: 1; }
-  to   { transform: scale(0.9)  translateY(-16px); opacity: 0; }
+  from { transform: scale(1) translateY(0); opacity: 1; }
+  to   { transform: scale(0.88) translateY(-20px); opacity: 0; }
 }
 
-/* ── Type badge ──────────────────────────────────────────────── */
+/* ── Type badge ─────────────────────────────────────────────── */
 .cpa-type-badge {
   position: absolute;
-  top: -13px;
+  top: -14px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 3px 16px;
+  padding: 4px 20px;
   border-radius: 20px;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #fff;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.6), 0 0 14px var(--cpa-glow);
   white-space: nowrap;
 }
 
-/* ── Art ─────────────────────────────────────────────────────── */
+/* ── Art ──────────────────────────────────────────────────── */
 .cpa-art-frame {
-  width: 200px;
-  height: 200px;
-  border-radius: 16px;
+  width: 260px;
+  height: 260px;
+  border-radius: 18px;
   overflow: hidden;
-  border: 2px solid var(--cpa-color);
-  box-shadow: 0 0 30px var(--cpa-glow), inset 0 0 20px rgba(0,0,0,0.4);
+  border: 2.5px solid var(--cpa-color);
+  box-shadow:
+    0 0 40px var(--cpa-glow),
+    0 0 80px color-mix(in srgb, var(--cpa-glow) 40%, transparent),
+    inset 0 0 30px rgba(0,0,0,0.4);
   background: rgba(0,0,0,0.3);
   flex-shrink: 0;
+  position: relative;
 }
 
-.cpa-art-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+.cpa-art-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+  animation: artShimmer 2.8s ease-in-out infinite;
+  pointer-events: none;
 }
+
+@keyframes artShimmer {
+  0%   { transform: translateX(-120%); }
+  40%  { transform: translateX(120%); }
+  100% { transform: translateX(120%); }
+}
+
+.cpa-art-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .cpa-art-fallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4rem;
-  background: rgba(0,0,0,0.2);
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 5rem; background: rgba(0,0,0,0.2);
 }
 
-/* ── Text content ────────────────────────────────────────────── */
+/* ── Text ─────────────────────────────────────────────────── */
 .cpa-card-name {
   font-family: 'Cinzel', 'Georgia', serif;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: 700;
   color: var(--cpa-color);
   text-align: center;
-  text-shadow: 0 0 20px var(--cpa-glow);
-  line-height: 1.2;
+  text-shadow: 0 0 24px var(--cpa-glow), 0 0 8px var(--cpa-glow);
+  line-height: 1.15;
 }
 
-.cpa-player-line {
-  font-size: 0.88rem;
-  text-align: center;
-}
-
-.cpa-player-name {
-  font-weight: 800;
-  color: #fff;
-}
-
-.cpa-played {
-  color: rgba(255,255,255,0.5);
-  font-style: italic;
-}
+.cpa-player-line { font-size: 0.92rem; text-align: center; }
+.cpa-player-name { font-weight: 800; color: #fff; }
+.cpa-played { color: rgba(255,255,255,0.45); font-style: italic; }
 
 .cpa-desc {
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.6);
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.65);
   text-align: center;
-  line-height: 1.5;
-  max-width: 320px;
+  line-height: 1.55;
+  max-width: 380px;
   border-left: 2px solid var(--cpa-color);
   border-right: 2px solid var(--cpa-color);
-  padding: 0.4rem 0.75rem;
+  padding: 0.45rem 0.8rem;
   border-radius: 4px;
-  background: color-mix(in srgb, var(--cpa-color) 6%, transparent);
+  background: color-mix(in srgb, var(--cpa-color) 7%, transparent);
 }
 
 .cpa-result {
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   color: #fff;
-  text-align: center;
   font-weight: 600;
-  background: color-mix(in srgb, var(--cpa-color) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--cpa-color) 35%, transparent);
-  border-radius: 8px;
-  padding: 0.5rem 0.75rem;
-  max-width: 340px;
-  line-height: 1.4;
+  background: color-mix(in srgb, var(--cpa-color) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cpa-color) 40%, transparent);
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem;
+  max-width: 400px;
+  line-height: 1.45;
+  width: 100%;
 }
 
-.cpa-result-arrow {
-  color: var(--cpa-color);
-  font-size: 1rem;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
+.cpa-result-arrow { color: var(--cpa-color); font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
 
-/* ── Progress bar ────────────────────────────────────────────── */
+/* ── Progress bar ─────────────────────────────────────────── */
 .cpa-progress {
   width: 100%;
-  height: 3px;
-  background: rgba(255,255,255,0.1);
+  height: 4px;
+  background: rgba(255,255,255,0.08);
   border-radius: 2px;
   overflow: hidden;
-  margin-top: 0.25rem;
+  margin-top: 0.2rem;
 }
 
 .cpa-progress-fill {
   height: 100%;
   width: 100%;
-  background: var(--cpa-color);
+  background: linear-gradient(90deg, transparent, var(--cpa-color));
   border-radius: 2px;
   animation: cpaProgress linear forwards;
   transform-origin: left;
@@ -193,10 +192,9 @@
   to   { transform: scaleX(0); }
 }
 
-/* ── Dismiss hint ────────────────────────────────────────────── */
 .cpa-dismiss-hint {
-  font-size: 0.62rem;
-  color: rgba(255,255,255,0.22);
-  letter-spacing: 0.05em;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.18);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }

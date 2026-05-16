@@ -114,9 +114,14 @@ function resolveEffect(game, playerId, card, opts = {}) {
       if (idx >= 0 && idx < game.communityCards.length) {
         const removed = game.communityCards.splice(idx, 1)[0];
         game.deck.addToDiscard([removed]);
-        return { success: true, message: `Community card ${idx + 1} burned`, spinResult: result };
+        const replacement = game.deck.dealOne();
+        if (replacement) {
+          game.communityCards.splice(idx, 0, replacement);
+          return { success: true, message: `Board card ${idx + 1} incinerated and replaced with ${replacement.rank}${replacement.suit}`, spinResult: result };
+        }
+        return { success: true, message: `Board card ${idx + 1} incinerated (deck empty, not replaced)`, spinResult: result };
       }
-      return { success: true, message: `Spin result ${result}: no card at that position`, spinResult: result };
+      return { success: true, message: `Spin ${result}: no card at that position`, spinResult: result };
     }
 
     // ── Yes, You ──────────────────────────────────────────────────────────────
@@ -269,15 +274,15 @@ function resolveEffect(game, playerId, card, opts = {}) {
       const call = opts.coinCall || (Math.random() < 0.5 ? 'heads' : 'tails'); // bots random
       const won = flip === call;
       if (!won) {
-        const amount = Math.min(game.bigBlind, target.chips);
+        const amount = Math.min(game.bigBlind * 2, target.chips);
         target.chips -= amount;
         player.chips += amount;
       }
       return {
         success: true,
         message: won
-          ? `${target.name} called correctly — no effect`
-          : `${target.name} called wrong — paid ${game.bigBlind} to ${player.name}`,
+          ? `${target.name} called correctly — escaped the siphon`
+          : `${target.name} called wrong — lost ${game.bigBlind * 2} to ${player.name}`,
         spinResult: result,
         coinResult: { flip, call, won },
       };
@@ -358,7 +363,7 @@ function resolveEffect(game, playerId, card, opts = {}) {
       const call = opts.coinCall || (Math.random() < 0.5 ? 'heads' : 'tails');
       const flip = coinFlip();
       const won = flip === call;
-      const bbAmt = game.bigBlind;
+      const bbAmt = game.bigBlind * 2;
       if (won) {
         for (const p of activePlayers) {
           if (p.id === playerId) continue;

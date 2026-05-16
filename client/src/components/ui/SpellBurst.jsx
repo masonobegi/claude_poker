@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import './SpellBurst.css';
 
-const RUNES = ['✦', '✧', '⋆', '★', '✵', '⊹', '✺', '⁕'];
-const COLORS = ['#cc88ff', '#88aaff', '#ffcc44', '#ff88cc', '#88ffcc'];
+const RUNES = ['✦', '✧', '⋆', '★', '✵', '⊹', '✺', '⁕', '◆', '◇', '❋', '❊'];
+const COLORS = ['#cc88ff', '#88aaff', '#ffcc44', '#ff88cc', '#88ffcc', '#ff6688', '#44ffcc', '#ffaa44'];
 
 function makeParticles(count) {
   return Array.from({ length: count }, (_, i) => ({
     id: i,
     rune: RUNES[Math.floor(Math.random() * RUNES.length)],
     color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    angle: (i / count) * 360 + Math.random() * 30,
-    distance: 60 + Math.random() * 80,
-    size: 0.8 + Math.random() * 0.8,
-    duration: 0.6 + Math.random() * 0.5,
-    delay: Math.random() * 0.15,
+    angle: (i / count) * 360 + Math.random() * 20,
+    distance: 80 + Math.random() * 160,
+    size: 0.9 + Math.random() * 1.2,
+    duration: 0.65 + Math.random() * 0.55,
+    delay: Math.random() * 0.12,
   }));
 }
 
 export default function SpellBurst({ active, onDone }) {
-  const [particles] = useState(() => makeParticles(14));
+  const [particles] = useState(() => makeParticles(28));
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function SpellBurst({ active, onDone }) {
     const t = setTimeout(() => {
       setVisible(false);
       onDone?.();
-    }, 900);
+    }, 1100);
     return () => clearTimeout(t);
   }, [active]);
 
@@ -36,9 +36,8 @@ export default function SpellBurst({ active, onDone }) {
   return (
     <div className="spell-burst-overlay">
       <div className="spell-burst-center">
-        {/* Screen flash */}
         <div className="spell-burst-flash" />
-        {/* Particles */}
+        <div className="spell-burst-flash spell-burst-flash-2" />
         {particles.map(p => (
           <div
             key={p.id}
@@ -55,9 +54,11 @@ export default function SpellBurst({ active, onDone }) {
             {p.rune}
           </div>
         ))}
-        {/* Expanding ring */}
         <div className="spell-burst-ring" />
         <div className="spell-burst-ring spell-burst-ring-2" />
+        <div className="spell-burst-ring spell-burst-ring-3" />
+        <div className="spell-burst-ring spell-burst-ring-4" />
+        <div className="spell-burst-core" />
       </div>
     </div>
   );
