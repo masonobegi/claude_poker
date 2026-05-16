@@ -25,7 +25,7 @@ const { GameRoom } = require('./server/src/game/GameRoom');
 const NUM_BOTS        = 5;
 const STARTING_CHIPS  = 8000;   // low so games finish fast
 const TARGET_GAMES    = 10;
-const SIM_TIMEOUT_MS  = 300_000; // 5 minutes real time
+const SIM_TIMEOUT_MS  = 480_000; // 8 minutes real time
 
 // ── Accumulators ─────────────────────────────────────────────────────────────
 const errors          = [];
@@ -195,6 +195,19 @@ function makeRoom() {
     return result;
   };
 
+  // ── Per-phase granular chip tracking to isolate drifts ───────────────────
+  const origResolveWinChoice = room.resolveWinChoice.bind(room);
+  room.resolveWinChoice = function(playerId, choice, stealId) {
+    const before = this.players.reduce((s,p)=>s+p.chips,0) + this.pot + this.rolloverPot;
+    const result = origResolveWinChoice(playerId, choice, stealId);
+    const after  = this.players.reduce((s,p)=>s+p.chips,0) + this.pot + this.rolloverPot;
+    const drift  = after - before;
+    if (Math.abs(drift) > 5) {
+      err(`Chip drift INSIDE resolveWinChoice (${choice}): ${drift}  (before=${before} after=${after})`);
+    }
+    return result;
+  };
+
   // ── Track showdowns for hand type stats ─────────────────────────────────
   const origShowdown = room._doShowdown.bind(room);
   room._doShowdown = function() {
@@ -326,8 +339,8 @@ function finish() {
     'reflop','prophecy','hot_potato','return_reriver','call_in','404_error',
     'chain_reaction','change_clothes','drained','sixth_sense','reborn','show_me',
     'wild_style','eye_patch','risk_taker','veto','blurred','push_through',
-    'king_me','reverse_reverse','thats_odd','royalty','in_the_shadows',
-    'lucky_7','straight_up','underdog',
+    'king_me','reverse_reverse','thats_odd',
+    // bounties removed from game
   ];
   const neverPlayed = [];
   for (const id of allIds) {

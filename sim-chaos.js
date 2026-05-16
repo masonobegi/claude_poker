@@ -173,14 +173,6 @@ function makeRoom() {
     return result;
   };
 
-  const origBounties = room._resolveBounties.bind(room);
-  room._resolveBounties = function() {
-    const before = this.players.reduce((s,p)=>s+p.chips,0);
-    origBounties();
-    const after  = this.players.reduce((s,p)=>s+p.chips,0);
-    if (after - before > 0) totalBankPayouts += after - before;
-  };
-
   // ── Track showdowns ──────────────────────────────────────────────────────
   const origShowdown = room._doShowdown.bind(room);
   room._doShowdown = function() {
