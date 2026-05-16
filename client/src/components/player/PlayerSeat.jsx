@@ -1,8 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PlayingCard from '../cards/PlayingCard';
 import CardBack from '../cards/CardBack';
 import AvatarImage from './AvatarImage';
 import './PlayerSeat.css';
+
+function AnimatedChips({ chips }) {
+  const [display, setDisplay] = useState(chips);
+  const [dir, setDir] = useState('');
+  const prev = useRef(chips);
+  useEffect(() => {
+    if (chips === prev.current) return;
+    setDir(chips > prev.current ? 'gaining' : 'losing');
+    const start = prev.current, end = chips, t0 = Date.now(), dur = 700;
+    const tick = () => {
+      const p = Math.min((Date.now() - t0) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      setDisplay(Math.round(start + (end - start) * e));
+      if (p < 1) requestAnimationFrame(tick);
+      else { setDisplay(end); setTimeout(() => setDir(''), 600); }
+    };
+    requestAnimationFrame(tick);
+    prev.current = chips;
+  }, [chips]);
+  const f = n => n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'')+'K' : String(n);
+  return <div className={`player-chips ${dir}`}>{f(display)}</div>;
+}
 
 function fmt(n) {
   if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
@@ -20,7 +42,7 @@ function WizardHat({ isMe, isActive }) {
   );
 }
 
-export default function PlayerSeat({ player, isMe, isActive, isDealer, isShowdown, bigBlind }) {
+export default function PlayerSeat({ player, isMe, isActive, isDealer, isShowdown, bigBlind, chatMessage }) {
   if (!player) return null;
 
   const { name, chips, hasFolded, isAllIn, eliminated, powerCardCount, holeCards, revealedHoleCardIndices, eyePatchIndex, bestHand, isSmallBlind, isBigBlind, isBot } = player;
@@ -55,6 +77,13 @@ export default function PlayerSeat({ player, isMe, isActive, isDealer, isShowdow
         }
       </div>
 
+      {/* Chat bubble from bot */}
+      {chatMessage?.message && (
+        <div className="player-chat-bubble" key={chatMessage.key}>
+          {chatMessage.message}
+        </div>
+      )}
+
       {/* Character sprite — wizard hat + circular avatar */}
       <div className="player-sprite-wrap">
         <WizardHat isMe={isMe} isActive={isActive} />
@@ -83,7 +112,7 @@ export default function PlayerSeat({ player, isMe, isActive, isDealer, isShowdow
             </span>
           )}
         </div>
-        <div className="player-chips">{fmt(chips)}</div>
+        <AnimatedChips chips={chips} />
       </div>
 
       {/* Active glow ring around whole seat */}

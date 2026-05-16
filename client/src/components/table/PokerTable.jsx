@@ -26,7 +26,7 @@ function fmt(n) {
   return String(n);
 }
 
-export default function PokerTable({ gameState, playerId, onSellCard }) {
+export default function PokerTable({ gameState, playerId, botChats, onSellCard }) {
   const { players, communityCards, pot, rolloverPot, dealerIndex, activePlayerIndex, phase, bigBlind, mods } = gameState;
 
   const myRawIdx = players.findIndex(p => p.id === playerId);
@@ -87,6 +87,7 @@ export default function PokerTable({ gameState, playerId, onSellCard }) {
               isDealer={isDealer}
               isShowdown={isShowdown}
               bigBlind={bigBlind}
+              chatMessage={botChats?.[player.id]}
               onSellCard={onSellCard}
             />
           </div>

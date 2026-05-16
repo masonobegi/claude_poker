@@ -62,6 +62,11 @@ const POWER_CARD_WINDOW_PHASES = new Set([
 
 const STARTING_CHIPS = 50000;
 const STARTING_BIG_BLIND = 1000;
+const PRESETS = {
+  short:    { startingChips: 20000, bigBlind: 2000 },
+  standard: { startingChips: 50000, bigBlind: 1000 },
+  deep:     { startingChips: 100000, bigBlind: 500 },
+};
 const MAX_POWER_CARDS = 4;
 const REACTIVE_WINDOW_MS = 10000;
 const BOT_ACTION_DELAY_MS = 1200;
@@ -166,10 +171,15 @@ class GameRoom {
 
   // ── Game Start ─────────────────────────────────────────────────────────────
 
-  startGame(requesterId) {
+  startGame(requesterId, settings = {}) {
     if (requesterId !== this.hostId) return { error: 'Only host can start' };
     if (this.players.length < 2) return { error: 'Need at least 2 players' };
     if (this.phase !== PHASES.LOBBY) return { error: 'Already started' };
+
+    // Apply preset settings
+    const preset = PRESETS[settings.preset] || PRESETS.standard;
+    this.bigBlind = preset.bigBlind;
+    for (const p of this.players) p.chips = preset.startingChips;
 
     // Distribute starting veto cards
     for (const p of this.players) {
@@ -413,7 +423,6 @@ class GameRoom {
       this._scheduleNext(() => this._defaultWinChoice(), duration || 20000);
     }
     else if (phase === PHASES.HAND_COMPLETE) {
-      this._resolveBounties();
       this._botPlayPhaseCards();
       this._scheduleNext(() => this._endHand(), duration || 3000);
     }
@@ -805,6 +814,13 @@ class GameRoom {
     }
 
     this._enforceMaxPowerCards(winner);
+
+    // Bot win reaction
+    if (winner.isBot && winner.bot) {
+      const line = winner.bot.getReactionLine('win');
+      if (line) setTimeout(() => this.broadcast('game:botChat', { playerId: winner.id, name: winner.name, message: line }), 500);
+    }
+
     this._setPhase(PHASES.HAND_COMPLETE);
     return { ok: true };
   }
@@ -854,22 +870,6 @@ class GameRoom {
   }
 
   // ── Bounties ───────────────────────────────────────────────────────────────
-
-  _resolveBounties() {
-    for (const p of this.players) {
-      if (p.id !== this.winnerInfo?.winnerId) continue;
-      if (!p.bestHand) continue; // no showdown — bounties don't apply to fold wins
-      const bounties = p.powerCards.filter(c => c.type === CARD_TYPE.BOUNTY);
-      for (const bounty of bounties) {
-        const result = resolveEffect(this, p.id, bounty, {});
-        if (result.success) {
-          this.addLog(`${p.name} bounty: ${result.message}`);
-          p.powerCards = p.powerCards.filter(c => c.instanceId !== bounty.instanceId);
-          this.powerDeck.discard(bounty);
-        }
-      }
-    }
-  }
 
   // ── Power Cards (human-initiated) ──────────────────────────────────────────
 
@@ -976,6 +976,15 @@ class GameRoom {
       coinResult: result.coinResult,
     });
 
+    // Bot personality reaction
+    if (player.isBot && player.bot) {
+      const lineKey = card.type === 'ENCHANTMENT' ? 'enchantment' : 'spell';
+      const line = player.bot.getReactionLine(lineKey);
+      if (line) {
+        setTimeout(() => this.broadcast('game:botChat', { playerId, name: player.name, message: line }), 600);
+      }
+    }
+
     // If private data (prophecy), send only to player
     if (result.privateData) {
       this.io.to(playerId).emit('game:privateData', result.privateData);
@@ -1072,6 +1081,12 @@ class GameRoom {
   _restoreSpellSnapshot() {
     const snap = this._spellSnapshot;
     if (!snap) return;
+    // Bot whose spell was vetoed reacts
+    const vetoedPlayer = this.players.find(p => p.id === this.reactiveWindow?.playerId);
+    if (vetoedPlayer?.isBot && vetoedPlayer.bot) {
+      const line = vetoedPlayer.bot.getReactionLine('vetoed');
+      if (line) setTimeout(() => this.broadcast('game:botChat', { playerId: vetoedPlayer.id, name: vetoedPlayer.name, message: line }), 400);
+    }
     this.pot = snap.pot;
     this.rolloverPot = snap.rolloverPot;
     this.communityCards = snap.communityCards;
@@ -1131,8 +1146,13 @@ class GameRoom {
       if (p.chips <= 0 && !p.eliminated) {
         p.eliminated = true;
         p.isActive = false;
-        this.broadcast('game:playerEliminated', { playerId: p.id, name: p.name });
+        this.broadcast('game:playerEliminated', { playerId: p.id, name: p.name, isBot: p.isBot });
         this.addLog(`${p.name} has been eliminated!`);
+        // Bot elimination reaction
+        if (p.isBot && p.bot) {
+          const line = p.bot.getReactionLine('eliminated');
+          if (line) setTimeout(() => this.broadcast('game:botChat', { playerId: p.id, name: p.name, message: line }), 800);
+        }
       }
     }
 
@@ -1253,6 +1273,8 @@ class GameRoom {
       wildRanks: this.wildRanks,
       disabledRanks: this.disabledRanks,
       orbitCount: this.orbitCount,
+      handCount: this.handCount,
+      hasAllIn: this.players.some(p => p.isAllIn && !p.eliminated),
       myCurrentHand,
       winnerInfo: this.winnerInfo ? {
         winnerId: this.winnerInfo.winnerId,

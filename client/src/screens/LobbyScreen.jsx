@@ -3,8 +3,15 @@ import { LOBBY_BG_ART } from '../assets/artUrls';
 import AvatarImage from '../components/player/AvatarImage';
 import './LobbyScreen.css';
 
+const PRESETS = [
+  { id: 'short',    label: 'Short Stack',  chips: '20K',  bb: '2,000', desc: 'Fast & furious' },
+  { id: 'standard', label: 'Standard',     chips: '50K',  bb: '1,000', desc: 'Balanced' },
+  { id: 'deep',     label: 'Deep Stack',   chips: '100K', bb: '500',   desc: 'Long strategic game' },
+];
+
 export default function LobbyScreen({ lobbyState, playerId, roomCode, actions }) {
   const [bgLoaded, setBgLoaded] = useState(false);
+  const [preset, setPreset] = useState('standard');
 
   useEffect(() => {
     const img = new Image(); img.src = LOBBY_BG_ART; img.onload = () => setBgLoaded(true);
@@ -65,6 +72,27 @@ export default function LobbyScreen({ lobbyState, playerId, roomCode, actions })
           </div>
         </div>
 
+        {/* Game Preset (host only) */}
+        {isHost && (
+          <div className="lobby-presets">
+            <div className="lobby-section-title">Game Style</div>
+            <div className="lobby-preset-row">
+              {PRESETS.map(p => (
+                <button
+                  key={p.id}
+                  className={`lobby-preset-btn ${preset === p.id ? 'selected' : ''}`}
+                  onClick={() => setPreset(p.id)}
+                >
+                  <div className="lp-label">{p.label}</div>
+                  <div className="lp-chips">{p.chips} chips</div>
+                  <div className="lp-bb">{p.bb} BB</div>
+                  <div className="lp-desc">{p.desc}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Actions */}
         <div className="lobby-actions">
           {isHost && canAddBot && (
@@ -73,7 +101,7 @@ export default function LobbyScreen({ lobbyState, playerId, roomCode, actions })
             </button>
           )}
           {isHost
-            ? <button className="lobby-btn lobby-btn-primary" onClick={actions.startGame} disabled={!canStart}>
+            ? <button className="lobby-btn lobby-btn-primary" onClick={() => actions.startGame({ preset })} disabled={!canStart}>
                 {canStart ? 'Start Game' : 'Need 2+ players'}
               </button>
             : <div className="lobby-waiting">
@@ -85,9 +113,9 @@ export default function LobbyScreen({ lobbyState, playerId, roomCode, actions })
 
         {/* Info */}
         <div className="lobby-info">
-          <div className="lobby-info-item"><span className="lobby-info-val">50,000</span> starting chips</div>
-          <div className="lobby-info-item"><span className="lobby-info-val">1,000</span> big blind</div>
           <div className="lobby-info-item"><span className="lobby-info-val">50+</span> power cards</div>
+          <div className="lobby-info-item"><span className="lobby-info-val">No</span> bounties</div>
+          <div className="lobby-info-item"><span className="lobby-info-val">8</span> max players</div>
         </div>
       </div>
     </div>

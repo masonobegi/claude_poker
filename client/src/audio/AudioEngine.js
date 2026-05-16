@@ -41,13 +41,16 @@ export class AudioEngine {
   play(name) {
     if (!this._running) return;
     switch (name) {
-      case 'deal':    this._deal(); break;
-      case 'chip':    this._chip(); break;
-      case 'fold':    this._fold(); break;
-      case 'spell':   this._spellCast(); break;
-      case 'win':     this._win(); break;
-      case 'check':   this._softClick(); break;
-      case 'raise':   this._raiseSound(); break;
+      case 'deal':        this._deal(); break;
+      case 'chip':        this._chip(); break;
+      case 'fold':        this._fold(); break;
+      case 'spell':       this._spellCast('spell'); break;
+      case 'enchantment': this._spellCast('enchantment'); break;
+      case 'win':         this._win(); break;
+      case 'elimination': this._elimination(); break;
+      case 'orbit':       this._orbitDraw(); break;
+      case 'check':       this._softClick(); break;
+      case 'raise':       this._raiseSound(); break;
     }
   }
 
@@ -193,19 +196,42 @@ export class AudioEngine {
   }
 
   // Spell cast: dramatic magical ascending burst
-  _spellCast() {
+  _spellCast(type = 'spell') {
     const t = this._ctx.currentTime;
-    // Rising arpeggio
-    const freqs = [220, 330, 440, 659, 880, 1109, 1320];
-    freqs.forEach((f, i) => {
-      this._ping(t + i * 0.055, f, 0.18 - i * 0.015, 0.3 - i * 0.02);
+    if (type === 'enchantment') {
+      // Enchantment — soft sustained hum, gentle
+      const freqs = [330, 440, 550, 660];
+      freqs.forEach((f, i) => this._ping(t + i * 0.07, f, 0.12 - i * 0.01, 0.5));
+      this._scheduleNote(880, t + 0.2, 0.8, 0.02, 'triangle');
+      this._noiseShot(t + 0.25, 0.04, 0.3, 'bandpass', 2000, 1.5);
+    } else {
+      // Spell — dramatic rising arpeggio, power surge
+      const freqs = [220, 330, 440, 659, 880, 1109, 1320];
+      freqs.forEach((f, i) => this._ping(t + i * 0.055, f, 0.18 - i * 0.015, 0.3 - i * 0.02));
+      this._noiseShot(t + 0.35, 0.08, 0.25, 'bandpass', 4000, 0.8);
+      this._scheduleNote(1760, t + 0.3, 0.6, 0.04, 'sine');
+      this._sweep(t, 80, 40, 0.5, 0.05);
+    }
+  }
+
+  // Orbit draw — magical card deal fanfare
+  _orbitDraw() {
+    const t = this._ctx.currentTime;
+    [[261, 0], [329, 0.08], [392, 0.16], [523, 0.26], [659, 0.38]].forEach(([f, d]) => {
+      this._ping(t + d, f, 0.2, 0.4);
     });
-    // Magical shimmer noise at peak
-    this._noiseShot(t + 0.35, 0.08, 0.25, 'bandpass', 4000, 0.8);
-    // Ethereal hold note
-    this._scheduleNote(1760, t + 0.3, 0.6, 0.04, 'sine');
-    // Low power rumble
-    this._sweep(t, 80, 40, 0.5, 0.05);
+    this._scheduleNote(523, t + 0.4, 0.7, 0.035, 'triangle');
+    this._noiseShot(t + 0.4, 0.05, 0.3, 'bandpass', 3000, 1.0);
+  }
+
+  // Elimination — dark descending sound
+  _elimination() {
+    const t = this._ctx.currentTime;
+    [[220, 0], [165, 0.12], [110, 0.26], [82, 0.44]].forEach(([f, d]) => {
+      this._ping(t + d, f, 0.15, 0.5);
+    });
+    this._sweep(t, 200, 60, 0.8, 0.06);
+    this._noiseShot(t + 0.3, 0.04, 0.4, 'lowpass', 400, 2.0);
   }
 
   // Win: triumphant major chord progression

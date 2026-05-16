@@ -66,10 +66,10 @@ io.on('connection', (socket) => {
     room.broadcast('lobby:state', room._lobbyState());
   });
 
-  socket.on('lobby:startGame', () => {
+  socket.on('lobby:startGame', (settings = {}) => {
     const room = getRoom(socket.data.roomCode);
     if (!room) return;
-    const result = room.startGame(socket.id);
+    const result = room.startGame(socket.id, settings);
     if (result.error) socket.emit('lobby:error', { message: result.error });
   });
 

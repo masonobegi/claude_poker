@@ -156,6 +156,41 @@
   font-size: 0.6rem;
 }
 
+.orbit-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  color: rgba(180,120,255,0.7);
+  padding: 0.25rem 0.5rem;
+  background: rgba(120,60,200,0.1);
+  border: 1px solid rgba(120,60,200,0.2);
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.orbit-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(180,120,255,0.8);
+  box-shadow: 0 0 4px rgba(180,120,255,0.5);
+}
+
+.orbit-label { font-weight: 700; }
+.orbit-players { color: rgba(180,120,255,0.4); font-size: 0.6rem; }
+
+.spectating-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,200,60,0.7);
+  background: rgba(255,200,60,0.08);
+  border: 1px solid rgba(255,200,60,0.25);
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+}
+
 .skip-btn {
   padding: 0.35rem 0.7rem;
   background: rgba(255,255,255,0.06);
@@ -179,6 +214,43 @@
 }
 .skip-btn:disabled { cursor: default; }
 .skip-count { opacity: 0.7; margin-left: 2px; }
+
+/* ── Mobile: collapse right power card panel ─────────── */
+@media (max-width: 768px) {
+  .game-power-panel {
+    right: 0.25rem;
+    max-height: 60vh;
+  }
+  .power-tile {
+    width: 130px !important;
+  }
+  .power-tile-art-wrap {
+    height: 90px !important;
+  }
+  .game-hud {
+    min-height: 120px;
+    max-height: 180px;
+    padding: 0.5rem;
+  }
+  .game-hud-left { width: 100px; }
+}
+
+@media (max-width: 480px) {
+  .game-power-panel {
+    position: fixed;
+    right: 0;
+    top: auto;
+    bottom: 180px;
+    transform: none;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: none;
+    padding: 0.5rem;
+  }
+  .power-hand { flex-direction: row !important; }
+  .power-tile { width: 110px !important; }
+}
 
 .game-log-toggle {
   background: rgba(255,255,255,0.06);

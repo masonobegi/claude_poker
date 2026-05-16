@@ -417,74 +417,9 @@ function resolveEffect(game, playerId, card, opts = {}) {
       return { success: true, message: 'Even cards (2,4,6,8,10) are disabled' };
     }
 
-    // ── Bounties ──────────────────────────────────────────────────────────────
-    case 'royalty':
-    case 'in_the_shadows':
-    case 'lucky_7':
-    case 'straight_up':
-    case 'underdog': {
-      return resolveBounty(game, player, def);
-    }
-
     default:
       return { success: false, message: `Unknown card: ${id}` };
   }
-}
-
-function resolveBounty(game, player, def) {
-  const hand = player.bestHand;
-  if (!hand) return { success: false, message: 'No winning hand recorded' };
-
-  const bb = game.bigBlind;
-  let earned = 0;
-  let message = '';
-
-  switch (def.definitionId) {
-    case 'royalty':
-      if (hand.type !== 'ROYAL_FLUSH') return { success: false, message: 'Bounty condition not met' };
-      earned = 5 * bb;
-      player.chips += earned;
-      message = `Royalty! +${earned} chips (Royal Flush bonus)`;
-      break;
-    case 'in_the_shadows': {
-      if (!handIsAllDarkSuits(hand, player)) return { success: false, message: 'Bounty condition not met' };
-      const second = game.lastHandRunnerUp;
-      if (second) {
-        const take = Math.min(bb, second.chips);
-        second.chips -= take;
-        player.chips += take;
-        earned = take;
-      }
-      message = `In the Shadows! Took 1 BB from ${second?.name || 'nobody'}`;
-      break;
-    }
-    case 'lucky_7':
-      if (!handContainsSeven(hand, player)) return { success: false, message: 'Bounty condition not met' };
-      for (const p of game.players.filter(p => p.id !== player.id && !p.eliminated)) {
-        const take = Math.min(Math.floor(bb * 0.5), p.chips);
-        p.chips -= take;
-        player.chips += take;
-        earned += take;
-      }
-      message = `Lucky 7! Took ½ BB from everyone (+${earned})`;
-      break;
-    case 'straight_up':
-      if (!['STRAIGHT', 'STRAIGHT_FLUSH', 'ROYAL_FLUSH'].includes(hand.type)) {
-        return { success: false, message: 'Bounty condition not met' };
-      }
-      earned = bb;
-      player.chips += earned;
-      message = `Straight Up! +${earned} chips`;
-      break;
-    case 'underdog':
-      if (hand.type !== 'HIGH_CARD') return { success: false, message: 'Bounty condition not met' };
-      earned = 2 * bb;
-      player.chips += earned;
-      message = `Underdog! +${earned} chips (High Card win)`;
-      break;
-  }
-
-  return { success: true, message, earned };
 }
 
 function handIsAllDarkSuits(hand, player) {

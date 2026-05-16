@@ -195,16 +195,6 @@ function makeRoom() {
     return result;
   };
 
-  // ── Track bank payouts from bounties ─────────────────────────────────────
-  const origResolveBounties = room._resolveBounties.bind(room);
-  room._resolveBounties = function() {
-    const chipsBefore = this.players.reduce((s,p)=>s+p.chips,0);
-    origResolveBounties();
-    const chipsAfter  = this.players.reduce((s,p)=>s+p.chips,0);
-    const bankPaid = chipsAfter - chipsBefore;
-    if (bankPaid > 0) totalBankPayouts += bankPaid;
-  };
-
   // ── Track showdowns for hand type stats ─────────────────────────────────
   const origShowdown = room._doShowdown.bind(room);
   room._doShowdown = function() {

@@ -25,7 +25,9 @@ export default function App() {
   const [spinnerData, setSpinnerData] = useState(null);
   const [needSell, setNeedSell] = useState(false);
   const [spellBurst, setSpellBurst] = useState(false);
-  const [cardEvents, setCardEvents] = useState([]); // for PowerCardToast
+  const [cardEvents, setCardEvents] = useState([]);
+  const [botChats, setBotChats] = useState({});       // playerId → { message, key }
+  const [eliminationCeremony, setEliminationCeremony] = useState(null); // { playerId, name, isBot }
 
   const notify = useCallback((msg, type = 'info') => {
     setNotification({ msg, type });
@@ -66,7 +68,7 @@ export default function App() {
       else audioEngine.play('chip');
     });
     socket.on('game:powerCardPlayed', ({ playerId: pid, playerName, card, result: resultMsg, spinResult }) => {
-      audioEngine.play('spell');
+      audioEngine.play(card?.type === 'ENCHANTMENT' ? 'enchantment' : 'spell');
       setSpellBurst(true);
       if (spinResult) {
         setSpinnerData({ result: Array.isArray(spinResult) ? spinResult[0] : spinResult });
@@ -120,7 +122,21 @@ export default function App() {
       notify(`You drew: ${card.icon} ${card.name}`, 'info');
     });
     socket.on('game:orbitComplete', ({ orbitCount }) => {
-      notify(`🌀 Orbit ${orbitCount} complete! Everyone draws a power card!`, 'orbit');
+      audioEngine.play('orbit');
+      notify(`Orbit ${orbitCount} complete — everyone draws a power card!`, 'orbit');
+    });
+    socket.on('game:botChat', ({ playerId: pid, name, message }) => {
+      setBotChats(prev => ({ ...prev, [pid]: { message, key: Date.now() } }));
+      setTimeout(() => setBotChats(prev => {
+        const n = { ...prev };
+        if (n[pid]?.message === message) delete n[pid];
+        return n;
+      }), 4000);
+    });
+    socket.on('game:playerEliminated', ({ playerId: pid, name, isBot }) => {
+      audioEngine.play('elimination');
+      setEliminationCeremony({ playerId: pid, name, isBot });
+      setTimeout(() => setEliminationCeremony(null), 4000);
     });
     socket.on('game:over', ({ standings }) => {
       audioEngine.stop();
@@ -143,7 +159,7 @@ export default function App() {
     joinRoom: (code, name) => socket.emit('lobby:join', { roomCode: code, playerName: name }),
     addBot: () => socket.emit('lobby:addBot'),
     removeBot: (botId) => socket.emit('lobby:removeBot', { botId }),
-    startGame: () => socket.emit('lobby:startGame'),
+    startGame: (settings) => socket.emit('lobby:startGame', settings || {}),
 
     gameAction: (action, amount) => socket.emit('game:action', { action, amount }),
     playPowerCard: (opts) => socket.emit('game:playPowerCard', opts),
@@ -199,6 +215,8 @@ export default function App() {
       spellBurst={spellBurst}
       onSpellBurstDone={() => setSpellBurst(false)}
       cardEvents={cardEvents}
+      botChats={botChats}
+      eliminationCeremony={eliminationCeremony}
       needSell={needSell}
       onSpinnerClose={() => setSpinnerData(null)}
       actions={actions}

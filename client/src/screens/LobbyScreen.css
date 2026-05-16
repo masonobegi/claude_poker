@@ -196,6 +196,43 @@
   gap: 0.75rem;
 }
 
+/* ── Game preset selector ─────────────────────────────────── */
+.lobby-presets {
+  background: rgba(5,2,18,0.75);
+  border: 1px solid rgba(180,120,255,0.15);
+  border-radius: 16px;
+  padding: 1.25rem;
+  backdrop-filter: blur(8px);
+}
+
+.lobby-preset-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.lobby-preset-btn {
+  flex: 1;
+  padding: 0.75rem 0.5rem;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  color: #fff;
+}
+.lobby-preset-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(180,120,255,0.35); }
+.lobby-preset-btn.selected {
+  background: rgba(120,60,220,0.2);
+  border-color: rgba(160,90,255,0.6);
+  box-shadow: 0 0 14px rgba(120,60,200,0.25);
+}
+
+.lp-label { font-size: 0.8rem; font-weight: 800; color: #e0d0ff; margin-bottom: 4px; }
+.lp-chips { font-size: 1rem; font-weight: 900; color: var(--gold); }
+.lp-bb    { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+.lp-desc  { font-size: 0.62rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.05em; }
+
 .lobby-btn {
   padding: 0.85rem;
   border-radius: 10px;

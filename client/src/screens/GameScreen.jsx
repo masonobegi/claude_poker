@@ -39,13 +39,16 @@ import SpellBurst from '../components/ui/SpellBurst';
 import PowerCardToast from '../components/ui/PowerCardToast';
 import CardPlayAnnouncement from '../components/ui/CardPlayAnnouncement';
 import Notification from '../components/ui/Notification';
+import EliminationCeremony from '../components/ui/EliminationCeremony';
+import RollingLog from '../components/ui/RollingLog';
 import './GameScreen.css';
 
 export default function GameScreen({
   gameState, playerId, gameLog, notification,
   winChoiceData, rankPrompt, coinPrompt, reactiveWindow, reactiveQueue,
   skipVotes, onSkipPhase,
-  spinnerData, spellBurst, onSpellBurstDone, cardEvents, needSell, onSpinnerClose, actions, audioEngine,
+  spinnerData, spellBurst, onSpellBurstDone, cardEvents, botChats, eliminationCeremony,
+  needSell, onSpinnerClose, actions, audioEngine,
 }) {
   const [selectedCard, setSelectedCard] = useState(null);
   const [logOpen, setLogOpen] = useState(false);
@@ -70,10 +73,13 @@ export default function GameScreen({
     gameState.players[gameState.activePlayerIndex]?.id === playerId;
   const isBettingPhase = ['preflop_betting','flop_betting','turn_betting','river_betting'].includes(gameState.phase);
   const isGameOver = gameState.phase === 'game_over';
+  const isSpectating = me?.eliminated === true;
   const myPowerCards = me?.powerCards || [];
   const callAmount = me ? Math.max(0, gameState.currentBet - me.currentBet) : 0;
   const myCurrentHand = gameState.myCurrentHand;
   const phaseDeadline = gameState.phaseDeadline;
+  const activePlayers = gameState.players.filter(p => !p.eliminated).length;
+  const orbitCount = gameState.orbitCount || 0;
 
   const handlePowerCardPlay = (card, extraOpts = {}) => {
     actions.playPowerCard({
@@ -97,6 +103,7 @@ export default function GameScreen({
         <PokerTable
           gameState={gameState}
           playerId={playerId}
+          botChats={botChats || {}}
           onSellCard={needSell ? actions.sellPowerCard : null}
         />
       </div>
@@ -107,6 +114,12 @@ export default function GameScreen({
           <PhaseIndicator phase={gameState.phase} />
           <ModsIndicator mods={gameState.mods} wildRanks={gameState.wildRanks} disabledRanks={gameState.disabledRanks} />
           <SkipButton phase={gameState.phase} skipVotes={skipVotes} onSkip={onSkipPhase} playerId={playerId} />
+          <div className="orbit-indicator" title="Completed orbits — everyone draws a card each orbit">
+            <div className="orbit-dot" />
+            <span className="orbit-label">Orbit {orbitCount}</span>
+            <span className="orbit-players">{activePlayers}p</span>
+          </div>
+          {isSpectating && <div className="spectating-badge">Spectating</div>}
         </div>
 
         <div className="game-hud-center">
@@ -166,6 +179,12 @@ export default function GameScreen({
           playerId={playerId}
         />
       </div>
+
+      {/* Rolling log feed — always visible, bottom-left */}
+      <RollingLog entries={gameLog} />
+
+      {/* Elimination ceremony */}
+      <EliminationCeremony data={eliminationCeremony} />
 
       {/* Game Log drawer */}
       <GameLog entries={gameLog} open={logOpen} onClose={() => setLogOpen(false)} />
