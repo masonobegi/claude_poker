@@ -8,27 +8,25 @@
   position: relative;
 }
 
-/* Rich gradient background — visible immediately, no loading required */
+/* Warm base background — wood tone so the AI art blends in */
 .game-screen::before {
   content: '';
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse at 25% 20%, rgba(80,20,180,0.45) 0%, transparent 50%),
-    radial-gradient(ellipse at 75% 80%, rgba(40,10,120,0.4) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(20,5,60,0.3) 0%, transparent 70%),
-    linear-gradient(160deg, #0c0420 0%, #060114 50%, #0a0220 100%);
+    radial-gradient(ellipse at 50% 50%, rgba(80,40,10,0.5) 0%, transparent 70%),
+    linear-gradient(160deg, #2a1505 0%, #1e0e02 50%, #251204 100%);
   z-index: 0;
   pointer-events: none;
 }
 
-/* AI background art div — fades in after image loads */
+/* AI background art div — fades in after image loads, higher opacity for cartoony floor */
 .game-bg-art {
   position: fixed;
   inset: 0;
   background-size: cover;
   background-position: center;
-  opacity: 0.28;
+  opacity: 0.55;
   z-index: 0;
   pointer-events: none;
   animation: bgFadeIn 1.5s ease-out;
@@ -36,7 +34,7 @@
 
 @keyframes bgFadeIn {
   from { opacity: 0; }
-  to   { opacity: 0.28; }
+  to   { opacity: 0.55; }
 }
 
 .game-table-area, .game-hud { position: relative; z-index: 1; }
